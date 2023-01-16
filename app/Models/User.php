@@ -42,7 +42,23 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function rules() {
+    public function rulesLogin() {
+        return [
+            'email' => 'required|email',
+            'password' => 'required'
+        ];
+    }
+
+    public function feedbackLogin() {
+        return [
+            'email.required' => 'O campo email é obrigatório',
+            'password.required' => 'O campo senha é obrigátorio',
+
+            'email.email' => 'O email é inválido',
+        ];
+    }
+
+    public function rulesRegister() {
         return [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255',
@@ -50,7 +66,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function feedback() {
+    public function feedbackRegister() {
         return [
             'name.required' => 'O campo nome é obrigátorio',
             'email.required' => 'O campo email é obrigatório',

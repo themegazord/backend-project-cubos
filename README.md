@@ -1,66 +1,194 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Backend Finance Cubo's Acadaemy
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Requisitos
 
-## About Laravel
+1. PHP 8.^
+2. Laravel 9.^
+3. Composer 2.5.^
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Instalação PHP
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Irei ensinar a como instalar o PHP usando XAMPP, por que já matamos a questão do MySQL.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. [Clique aqui](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/8.2.0/xampp-windows-x64-8.2.0-0-VS16-installer.exe) para fazer o download da versão 8.2.0 do XAMPP
+2. Clique em **Next**
+![XAMPP 1](public/readme/xampp_1.png)
 
-## Learning Laravel
+3. Clique em **Next**
+![XAMPP 1](public/readme/xampp_2.png)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+4. Clique em **Next**
+![XAMPP 1](public/readme/xampp_3.png)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+5. Clique em **Next**
+![XAMPP 1](public/readme/xampp_4.png)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+6. Clique em **Next**
+![XAMPP 1](public/readme/xampp_5.png)
 
-## Laravel Sponsors
+Espere a instalação terminar. No final das contas do XAMPP é famoso _full next_ ksks.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Instalação Composer
 
-### Premium Partners
+1. [Clique aqui](https://getcomposer.org/Composer-Setup.exe) isso vai fazer com que seja baixado a ultima versão do Composer
+2. Clique em **Next**
+![Composer 1](public/readme/composer_1.png)
+3. Clique em **Next**
+![Composer 2](public/readme/composer_2.png)
+4. Clique em **Next**
+![Composer 3](public/readme/composer_3.png)
+5. Clique em **Install**
+![Composer 4](public/readme/composer_4.png)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
 
-## Contributing
+## Clonagem e instalação das dependências
+Após tudo isso instalado com sucesso, crie uma pasta para comportar o clone do repositório usando e entre na pasta
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+mkdir <nome-repo>
+cd <nome-repo>
+```
 
-## Code of Conduct
+Ao entrar na pasta, execute o seguinte código
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+git clone https://github.com/themegazord/backend-project-cubos.git backend
+cd backend
+```
 
-## Security Vulnerabilities
+Isso irá criar uma pasta chamada `backend` e te levará até a mesma.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Dentro, execute o comando para instalar as dependências do projeto.
 
-## License
+```bash
+composer install
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Configurando .ENV
+
+Dentro do arquivo `.ENV` você vai ter que configurar o banco de dados baseado nas seguintes _tags_
+
+```php
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=financas_cubos
+DB_USERNAME=root
+DB_PASSWORD=
+```
+Caso você tenha instalado o XAMPP, apenas altere o nome do banco de dados pela tag `DB_DATABASE` que ta show de bola.
+
+
+## Inserindo as migrations no banco de dados.
+
+Toda vez que houver atualização, você tera que rodar o seguinte comando
+
+```bash
+php artisan migrate:refresh
+```
+
+Isso vai fazer com que o Eloquent (ORM do Laravel) de um rollback em todas as tabelas do banco de dados e migre elas novamente.
+
+## Executando o servidor
+
+Com tudo configurado, vamos iniciar o servidor rodando o seguinte comando
+
+```bash
+php artisan serve
+```
+
+Isso irá criar um servidor na porta 8000 por padrão, caso deseje executar em uma porta especifica, execute
+
+```bash
+php artisan serve --port=<numero-da-porta>
+```
+
+## Endpoint 
+
+Todas as endpoints da api serão `api/<nome-do-grupo>/<funcionalidade>`
+
+### Grupo Auth
+
+Responsável pelo registro e pelo login do mesmo.
+
+#### api/auth/login 
+
+```json
+"method": "POST",
+"headers": {
+    "Accept": "application/json",
+},
+"body": {
+    "email": "",
+    "password": ""
+},
+"validation": {
+    "email": [
+        "required",
+        "email" //email valido
+    ],
+    "password": [
+        "required"
+    ]
+},
+"return": {
+    "isValid": {
+        "token": "token sha-256",
+        "code": 200
+    },
+    "isNotValid": {
+        "error": "Invalid credentials",
+        "code": 401,
+    },
+    "messageValidation": {
+        "email.required" : "O campo email é obrigatório",
+        "password.required" : "O campo senha é obrigátorio",
+        "email.email" : "O email é inválido",
+    }
+}
+```
+
+#### api/auth/register
+
+```json
+"method": "POST",
+"headers": {
+    "Accept": "application/json",
+},
+"body": {
+    "name": "",
+    "email": "",
+    "password": ""
+},
+"validation": {
+    "name": {
+        "required",
+        "max:255",
+    },
+    "email": {
+        "required",
+        "email",
+        "max:255"
+    },
+    "password": {
+        "required"
+    }
+},
+"return": {
+    "isValid": {
+        "msg": "User has been created",
+        "code": 201
+    },
+    "isNotValid": {
+        "email.unique": "WIP (Work in Process"
+    },
+    "messageValidation": {
+            "name.required": "O campo nome é obrigátorio",
+            "email.required": "O campo email é obrigatório",
+            "password.required": "O campo de senha é obrigatório",
+            "name.max": "O nome deve conter no máximo 255 caracteres",
+            "email.max": "O email deve conter no máximo 255 caracteres",
+            "email.email": "O email é inválido",
+    }
+}
+```

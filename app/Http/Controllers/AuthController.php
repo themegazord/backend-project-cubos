@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function login(Request $request) {
-        $credentials = $request->only(['email', 'password']);
+        $user = new User;
+        $credentials = $request->validate($user->rulesLogin(), $user->feedbackLogin());
 
         if(!auth()->attempt($credentials)) {
             return response()->json(['error' => 'Invalid credentials'], 401);
@@ -23,8 +24,8 @@ class AuthController extends Controller
 
     public function register(Request $request) {
         $user = new User;
-        $credentials = $request->validate($user->rules(), $user->feedback());
+        $credentials = $request->validate($user->rulesRegister(), $user->feedbackRegister());
         $credentials['password'] = Hash::make($credentials['password']);
-        return response()->json($user->create($credentials), 201);
+        return response()->json(['msg' => 'User has been created'], 201);
     }
 }
