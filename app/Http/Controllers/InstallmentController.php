@@ -66,7 +66,9 @@ class InstallmentController extends Controller
      */
     public function update(Request $request, Installment $installment)
     {
-        //
+        $inst = $request->validate($installment->rules(), $installment->feedback());
+        $installment->update($inst);
+        return response()->json($inst);
     }
 
     /**

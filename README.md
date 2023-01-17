@@ -360,3 +360,93 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
     "messageValidation": {}
 }
 ```
+
+#### api/installments/{id}
+
+```json
+"method": "POST",
+"headers": {
+    "Accept": "application/json",
+    "Authorization": "Bearer <token>"
+},
+"body": {
+    "id": 5,
+    "users_id": 7,
+    "id_billing": 12704,
+    "emission_date": "2023-01-14",
+    "due_date": "2023-02-15",
+    "amount": 81.16,
+    "paid_amount": 81.16,
+    "_method": "PUT|PATCH"
+},
+"validation": {
+    "users_id": {
+        "exists",
+        "numeric"
+    },
+    "id_billing": {
+        "numeric",
+        "unique"
+    },
+    "emission_date": {
+        "date",
+        "date_format:'Y-m-d'"
+    },
+    "due_date": {
+        "date",
+        "date_format:'Y-m-d'",
+        "due_date:emission_date"
+    },
+    "amount": {
+        "numeric",
+        "min:1"
+    },
+    "paid_amount": {
+        "numeric",
+        "min:0",
+        "lte:amount"
+    }
+},
+"return": {
+    "isValid": {
+        [
+            {
+                "id": 5,
+                "users_id": 7,
+                "id_billing": 12704,
+                "emission_date": "2023-01-14",
+                "due_date": "2023-02-15",
+                "amount": 81.16,
+                "paid_amount": 99.11,
+                "user": {
+                    "id": 7,
+                    "name": "Gustavo de Camargo Campos"
+                }
+            }
+        ],
+        "code": 200
+    },
+    "isNotValid": {
+        "unathenticated": {
+            "code": 401,
+            "message": "Unauthenticated."
+        },
+        "installment not exists": {
+            "code": 404,
+            "error": "Installment not exists",
+        }
+    },
+    "messageValidation": {
+        "numeric": "Esse campo é apenas númerico",
+        "date": "Esse campo é apenas para data",
+        "users_id.exists": "Insira apenas um usuário válido",
+        "id_billing.unique": "Já existe essa cobrança",
+        "emission_date.date_format": "Formato inválido, formato correto -> YYYY-mm-dd",
+        "due_date.date_format": "Formato inválido, formato correto -> YYYY-mm-dd",
+        "due_date.due_date": "A data de vencimento não pode ser menor que a data de emissão",
+        "amount.min": "O valor do titulo deve ser maior que 0",
+        "paid_amount.min": "O valor do pagamento deve ser maior que 0",
+        "paid_amount.lte": "O valor do pagamento deve ser menor que o valor do titulo"
+    }
+}
+```
