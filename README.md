@@ -179,16 +179,15 @@ Responsável pelo registro e pelo login do mesmo.
         "msg": "User has been created",
         "code": 201
     },
-    "isNotValid": {
-        "email.unique": "WIP (Work in Process"
-    },
+    "isNotValid": {},
     "messageValidation": {
-            "name.required": "O campo nome é obrigátorio",
+        "name.required": "O campo nome é obrigátorio",
             "email.required": "O campo email é obrigatório",
             "password.required": "O campo de senha é obrigatório",
             "name.max": "O nome deve conter no máximo 255 caracteres",
             "email.max": "O email deve conter no máximo 255 caracteres",
             "email.email": "O email é inválido",
+            "email.unique": "Email já cadastrado",
     }
 }
 ```

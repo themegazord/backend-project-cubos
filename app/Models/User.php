@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Validation\Rule;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -59,11 +60,17 @@ class User extends Authenticatable
     }
 
     public function rulesRegister() {
-        return [
+        $rules = [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|max:255|unique:users',
             'password' => 'required'
         ];
+
+        if ($this->exists) {
+            $rules['email'] .= ',email,' . $this->id;
+        }
+
+        return $rules;
     }
 
     public function feedbackRegister() {
@@ -74,6 +81,8 @@ class User extends Authenticatable
 
             'name.max' => 'O nome deve conter no máximo 255 caracteres',
             'email.max' => 'O email deve conter no máximo 255 caracteres',
+
+            'email.unique' => 'Email já existe',
 
             'email.email' => 'O email é inválido',
         ];
