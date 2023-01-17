@@ -87,4 +87,8 @@ class User extends Authenticatable
             'email.email' => 'O email é inválido',
         ];
     }
+
+    public function installments() {
+        return $this->hasMany(Installment::class);
+    }
 }
