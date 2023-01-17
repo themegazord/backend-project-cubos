@@ -317,3 +317,46 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
     }
 }
 ```
+
+#### api/installments/{id}
+
+```json
+"method": "GET",
+"headers": {
+    "Accept": "application/json",
+    "Authorization": "Bearer <token>"
+},
+"body": {},
+"validation": {},
+"return": {
+    "isValid": {
+        [
+            {
+                "id": 5,
+                "users_id": 7,
+                "id_billing": 12704,
+                "emission_date": "2023-01-14",
+                "due_date": "2023-02-15",
+                "amount": 81.16,
+                "paid_amount": 99.11,
+                "user": {
+                    "id": 7,
+                    "name": "Gustavo de Camargo Campos"
+                }
+            }
+        ],
+        "code": 200
+    },
+    "isNotValid": {
+        "unathenticated": {
+            "code": 401,
+            "message": "Unauthenticated."
+        },
+        "installment not exists": {
+            "code": 404,
+            "error": "Installment not exists",
+        }
+    },
+    "messageValidation": {}
+}
+```

@@ -26,6 +26,4 @@ Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
-Route::middleware('auth:sanctum')->prefix('installments')->group(function () {
-    Route::apiResource('/', InstallmentController::class);
-});
+Route::middleware('auth:sanctum')->apiResource('installments', InstallmentController::class);
