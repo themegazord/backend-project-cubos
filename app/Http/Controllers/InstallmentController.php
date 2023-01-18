@@ -48,7 +48,7 @@ class InstallmentController extends Controller
     {
         $installment = new Installment();
         if(is_null($installment->find($id))) return response()->json(['error' => 'Installment not exists'], 404);
-        $response = $installment::select('id', 'users_id', 'id_billing', 'emission_date', 'due_date', 'amount', 'paid_amount')
+        $response = $installment::select('id', 'users_id', 'id_billing','status', 'debtor', 'emission_date', 'due_date', 'amount', 'paid_amount')
             ->with([
             'user' => function($query) {
                 $query->select(['id', 'name']);
@@ -67,8 +67,19 @@ class InstallmentController extends Controller
     public function update(Request $request, Installment $installment)
     {
         $inst = $request->validate($installment->rules(), $installment->feedback());
-        $installment->update($inst);
-        return response()->json($inst);
+        if(doubleval($inst['paid_amount']) > 0  && doubleval($inst['paid_amount']) < $installment->amount) {
+            $inst['status'] = 'P';
+            $installment->update($inst);
+            return response()->json($inst);
+        } else if (doubleval($inst['paid_amount']) === $installment->amount) {
+            $inst['status'] = 'B';
+            $installment->update($inst);
+            return response()->json($inst);
+        } else {
+            $inst['status'] = 'A';
+            $installment->update($inst);
+            return response()->json($inst);
+        }
     }
 
     /**

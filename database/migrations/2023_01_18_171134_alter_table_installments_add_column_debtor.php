@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('installments', function(Blueprint $table){
-            $table->enum('status', ['A', 'P', 'B', 'V'])->default('A')->after('id_billing');
+        Schema::table('installments', function(Blueprint $table) {
+            $table->string('debtor', 155)->after('status');
         });
     }
 

@@ -13,6 +13,8 @@ class Installment extends Model
     protected $fillable = [
         'users_id',
         'id_billing',
+        'status',
+        'debtor',
         'emission_date',
         'due_date',
         'amount',
@@ -31,6 +33,7 @@ class Installment extends Model
         $rules = [
             'users_id' => 'exists:users,id|numeric',
             'id_billing' => 'numeric|unique:installments',
+            'debtor'=> 'string|max_digits:155',
             'emission_date' => 'date|date_format:"Y-m-d"',
             'due_date' => 'date|date_format:"Y-m-d"|due_date:emission_date',
             'amount' => 'numeric|min:1',
@@ -52,6 +55,9 @@ class Installment extends Model
             'users_id.exists' => 'Insira apenas um usuário válido',
 
             'id_billing.unique' => 'Já existe essa cobrança',
+
+            'debtor.string' => 'O nome do devedor deve ser um texto',
+            'debtor.max_digits' => 'O nome do devedor deve conter no máximo 155 caracteres',
 
             'emission_date.date_format' => 'Formato inválido, formato correto -> YYYY-mm-dd',
 

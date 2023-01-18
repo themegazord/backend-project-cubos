@@ -226,6 +226,8 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
             "id": 1,
             "users_id": 5,
             "id_billing": 14496,
+            "status": "P",
+            "debtor": "Samantha Kshlerin",
             "emission_date": "2022-12-29",
             "due_date": "2023-02-03",
             "amount": 94.96,
@@ -259,6 +261,7 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
 "body": {
     "users_id": 5,
     "id_billing": 14496,
+    "debtor": "Samantha Kshlerin",
     "emission_date": "2022-12-29",
     "due_date": "2023-02-03",
     "amount": 94.96,
@@ -272,6 +275,10 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
     "id_billing": {
         "numeric",
         "unique"
+    },
+    "debtor": {
+        "string",
+        "max_digits:155"
     },
     "emission_date": {
         "date",
@@ -308,6 +315,8 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
         "date": "Esse campo é apenas para data",
         "users_id.exists": "Insira apenas um usuário válido",
         "id_billing.unique": "Já existe essa cobrança",
+        "debtor.string": "O nome do devedor deve ser um texto",
+        "debtor.max_digits": "O nome do devedor deve conter no máximo 155 caracteres",
         "emission_date.date_format": "Formato inválido, formato correto -> YYYY-mm-dd",
         "due_date.date_format": "Formato inválido, formato correto -> YYYY-mm-dd",
         "due_date.due_date": "A data de vencimento não pode ser menor que a data de emissão",
@@ -335,6 +344,8 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
                 "id": 5,
                 "users_id": 7,
                 "id_billing": 12704,
+                "status": "P",
+                "debtor": "Samantha Kshlerin",
                 "emission_date": "2023-01-14",
                 "due_date": "2023-02-15",
                 "amount": 81.16,
@@ -373,6 +384,7 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
     "id": 5,
     "users_id": 7,
     "id_billing": 12704,
+    "debtor": "Samantha Kshlerin",
     "emission_date": "2023-01-14",
     "due_date": "2023-02-15",
     "amount": 81.16,
@@ -387,6 +399,10 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
     "id_billing": {
         "numeric",
         "unique"
+    },
+    "debtor": {
+        "string",
+        "max_digits:155"
     },
     "emission_date": {
         "date",
@@ -414,6 +430,7 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
                 "id": 5,
                 "users_id": 7,
                 "id_billing": 12704,
+                "debtor": "Samantha Kshlerin",
                 "emission_date": "2023-01-14",
                 "due_date": "2023-02-15",
                 "amount": 81.16,
@@ -441,6 +458,8 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
         "date": "Esse campo é apenas para data",
         "users_id.exists": "Insira apenas um usuário válido",
         "id_billing.unique": "Já existe essa cobrança",
+        "debtor.string": "O nome do devedor deve ser um texto",
+        "debtor.max_digits": "O nome do devedor deve conter no máximo 155 caracteres",
         "emission_date.date_format": "Formato inválido, formato correto -> YYYY-mm-dd",
         "due_date.date_format": "Formato inválido, formato correto -> YYYY-mm-dd",
         "due_date.due_date": "A data de vencimento não pode ser menor que a data de emissão",

@@ -20,6 +20,7 @@ class InstallmentFactory extends Factory
         return [
             'users_id' => fake()->numberBetween(1, 7),
             'id_billing' => fake()->unique()->randomNumber(5, true),
+            'debtor' => fake()->name(),
             'emission_date' => fake()->dateTimeBetween('-1 month', 'now'),
             'due_date' => fake()->dateTimeBetween('now', '1 month'),
             'amount' => fake()->randomFloat(2, 20, 100),
