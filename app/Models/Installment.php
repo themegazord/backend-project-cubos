@@ -17,6 +17,7 @@ class Installment extends Model
         'debtor',
         'emission_date',
         'due_date',
+        'overdue_payment',
         'amount',
         'paid_amount'
     ];

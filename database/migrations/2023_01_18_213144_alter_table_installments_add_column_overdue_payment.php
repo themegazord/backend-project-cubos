@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('installments', function(Blueprint $table){
-            $table->enum('status', ['A', 'P', 'B'])->default('A')->after('id_billing');
+        Schema::table('installments', function(Blueprint $table) {
+            $table->boolean('overdue_payment')->default(false)->after('due_date');
         });
     }
 

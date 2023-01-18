@@ -20,7 +20,15 @@ class InstallmentController extends Controller
                 $query->select('id', 'name');
             }
         ])->get();
-        return response()->json($installments);
+        $array_installments = $installments->toArray();
+        $result = array_map(function ($installment) {
+            if($installment['due_date'] < date('Y-m-d')) {
+                $installment['overdue_payment'] = 1;
+                Installment::find($installment['id'])->update($installment);
+            }
+            return $installment;
+        }, $array_installments);
+        return response()->json($result);
     }
 
     /**
@@ -48,7 +56,7 @@ class InstallmentController extends Controller
     {
         $installment = new Installment();
         if(is_null($installment->find($id))) return response()->json(['error' => 'Installment not exists'], 404);
-        $response = $installment::select('id', 'users_id', 'id_billing','status', 'debtor', 'emission_date', 'due_date', 'amount', 'paid_amount')
+        $response = $installment::select('id', 'users_id', 'id_billing','status', 'debtor', 'emission_date', 'due_date', 'overdue_payment' ,'amount', 'paid_amount')
             ->with([
             'user' => function($query) {
                 $query->select(['id', 'name']);
@@ -93,3 +101,5 @@ class InstallmentController extends Controller
         //
     }
 }
+
+

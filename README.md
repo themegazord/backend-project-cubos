@@ -230,6 +230,7 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
             "debtor": "Samantha Kshlerin",
             "emission_date": "2022-12-29",
             "due_date": "2023-02-03",
+            "overdue_payment": 1,
             "amount": 94.96,
             "paid_amount": 73.9,
             "created_at": "2023-01-17T01:15:38.000000Z",
@@ -348,6 +349,7 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
                 "debtor": "Samantha Kshlerin",
                 "emission_date": "2023-01-14",
                 "due_date": "2023-02-15",
+                "overdue_payment": 1,
                 "amount": 81.16,
                 "paid_amount": 99.11,
                 "user": {
