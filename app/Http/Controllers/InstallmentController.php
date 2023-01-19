@@ -3,32 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\Installment;
-use GuzzleHttp\Psr7\Query;
 use Illuminate\Http\Request;
+use App\Repositories\Installment\InstallmentRepository;
 
 class InstallmentController extends Controller
 {
+
+    protected $installmentRepository;
+
+    public function __construct(InstallmentRepository $installmentRepository)
+    {
+        $this->installmentRepository = $installmentRepository;
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $installments = Installment::with([
-            'user' => function($query) {
-                $query->select('id', 'name');
-            }
-        ])->get();
-        $array_installments = $installments->toArray();
-        $result = array_map(function ($installment) {
-            if($installment['due_date'] < date('Y-m-d')) {
-                $installment['overdue_payment'] = 1;
-                Installment::find($installment['id'])->update($installment);
-            }
-            return $installment;
-        }, $array_installments);
-        return response()->json($result);
+        $filters = $request->query('filter');
+        $installments = $this->installmentRepository->push($filters ?? null);
+
+        return response()->json($installments);
     }
 
     /**

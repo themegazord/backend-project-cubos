@@ -218,6 +218,9 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
     "Accept": "application/json",
     "Authorization": "Bearer <token>"
 },
+"parameters": {
+    "type": "filter",
+}
 "body": {},
 "validation": {},
 "return": {
@@ -471,3 +474,29 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
     }
 }
 ```
+
+## Query params
+
+Caso um dos endpoint contenha em sua documentação da _key_ `"parameters": true` você poderá utilizar da query parameter determinada no endpoint na key `type`
+
+Ex: Caso o `type` seja `filter` o endpoint ficará `<endpoint>?filter=<parametros>`
+
+### Parametros
+
+Os parametros sempre vão ser separados por `;` e internamente por `:`.
+Ex: Você deseja que tal endpoint traga apenas os dados que contêm `overdue_payment = 1` e `amount > 100`, o filtro ficaria da seguinte forma: `<endpoint>?filter=overdue_payment:=:1;amount:>:100`.
+O separador `:` vai ser utilizado para definir o que é coluna, o que é operador e o que é valor e o operador de `;` é utilizado para separar um parametro de busca de outro.
+
+### Operadores
+
+Os operadores aceitaveis são:
+
+1. `=` -> Utilizado para comparar um valor com o conteúdo de uma coluna. Exemplo `amount:=:100`;
+2. `<>` ou `!=` -> Utilizado para comparar um valor com o conteúdo de uma coluna, retornando todos os resultados onde o valor é diferente. Exemplo `amount:<>:100`;
+3. `>` -> Utilizado para comparar um valor com o conteúdo de uma coluna, retornando todos os resultados onde o valor é maior. Exemplo `amount:>:100`;
+4. `>=` -> Utilizado para comparar um valor com o conteúdo de uma coluna, retornando todos os resultados onde o valor é maior ou igual. Exemplo `amount:>=:100`;
+5. `<` -> Utilizado para comparar um valor com o conteúdo de uma coluna, retornando todos os resultados onde o valor é menor. Exemplo `amount:<:100`;
+6. `<=` -> Utilizado para comparar um valor com o conteúdo de uma coluna, retornando todos os resultados onde o valor é menor ou igual. Exemplo `amount:<=:100`;
+7. `LIKE` -> Utilizado para comparar um valor com o conteúdo de uma coluna, retornando todos os resultados onde o valor é semelhante. Exemplo `debtor:LIKE:%Ant%`;
+   
+Todos esses operadores podem ser encontrados em documentações de `where clauses` de banco de dados relacionais como MySQL, SQL, Firebird e afins.
