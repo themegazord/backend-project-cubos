@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Installment;
 use Illuminate\Http\Request;
 use App\Repositories\Installment\InstallmentRepository;
-
+use Laravel\Sanctum\PersonalAccessToken;
 class InstallmentController extends Controller
 {
 

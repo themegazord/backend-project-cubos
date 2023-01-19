@@ -147,7 +147,12 @@ Responsável pelo registro e pelo login do mesmo.
 },
 "return": {
     "isValid": {
-        "token": "token sha-256",
+        {
+            "token": "token sha-256",
+            "id": 7,
+            "name": "Elenor DuBuque I",
+            "aka": "EI"
+        },
         "code": 200
     },
     "isNotValid": {
@@ -236,8 +241,6 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
             "overdue_payment": 1,
             "amount": 94.96,
             "paid_amount": 73.9,
-            "created_at": "2023-01-17T01:15:38.000000Z",
-            "updated_at": "2023-01-17T01:15:38.000000Z",
             "user": {
                 "id": 5,
                 "name": "Coy Mayert"

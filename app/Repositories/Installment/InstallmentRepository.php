@@ -11,6 +11,9 @@ class InstallmentRepository {
     {
         $this->installment = $installment;
     }
+    /**
+     * Function is deprecated
+     */
     public function generateAkaNameUser($arrayInstallments) {
         $result = array_map(function($i) {
             $nameInArray = explode(' ', trim($i['user']['name']));
@@ -54,7 +57,7 @@ class InstallmentRepository {
         foreach($filtrosTratados as $f) {
            $allInstallments->where($f[0], $f[1], $f[2]);
         }
-        return $this->generateAkaNameUser($allInstallments->get()->toArray());
+        return $allInstallments->get()->toArray();
 
     }
 
