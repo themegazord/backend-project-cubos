@@ -48,6 +48,7 @@ class InstallmentTest extends TestCase
                 'user'
             ]
         ]);
+        DB::delete('delete from users where id = :id', ['id' => $this->user->getAttributes()['id']]);
     }
 
     public function test_request_using_query_params_in_endpoint() {
@@ -69,6 +70,7 @@ class InstallmentTest extends TestCase
                 'user'
             ]
         ]);
+        DB::delete('delete from users where id = :id', ['id' => $this->user->getAttributes()['id']]);
     }
 
     public function test_create_installments() {
@@ -77,6 +79,7 @@ class InstallmentTest extends TestCase
         $response = $this->actingAs($this->user)->json('POST', 'api/installments', $this->payload);
         $response->assertStatus(201);
         $response->assertJson(['msg' => 'Installment has been created']);
+        DB::delete('delete from users where id = :id', ['id' => $this->user->getAttributes()['id']]);
     }
 
     public function test_show_installments_not_exists() {
@@ -84,6 +87,7 @@ class InstallmentTest extends TestCase
         $response = $this->actingAs($this->user)->json('GET', 'api/installments/1000');
         $response->assertStatus(404);
         $response->assertJson(['error' => 'Installment not exists']);
+        DB::delete('delete from users where id = :id', ['id' => $this->user->getAttributes()['id']]);
     }
 
     public function test_show_existing_installments() {
@@ -103,6 +107,7 @@ class InstallmentTest extends TestCase
             'paid_amount',
             'user'
         ]);
+        DB::delete('delete from users where id = :id', ['id' => $this->user->getAttributes()['id']]);
     }
 
     public function test_update_not_existing_installments() {
@@ -113,6 +118,7 @@ class InstallmentTest extends TestCase
         $response->assertJsonFragment([
             'error' => 'Installment not exists'
         ]);
+        DB::delete('delete from users where id = :id', ['id' => $this->user->getAttributes()['id']]);
     }
 
     public function test_update_existing_installments_with_status_open() {
@@ -130,6 +136,7 @@ class InstallmentTest extends TestCase
             'paid_amount',
             'status'
         ]);
+        DB::delete('delete from users where id = :id', ['id' => $this->user->getAttributes()['id']]);
     }
 
 
@@ -149,6 +156,7 @@ class InstallmentTest extends TestCase
             'paid_amount',
             'status'
         ]);
+        DB::delete('delete from users where id = :id', ['id' => $this->user->getAttributes()['id']]);
     }
 
 
@@ -168,6 +176,7 @@ class InstallmentTest extends TestCase
             'paid_amount',
             'status'
         ]);
+        DB::delete('delete from users where id = :id', ['id' => $this->user->getAttributes()['id']]);
     }
 
     public function test_see_all_installment_to_user() {
@@ -175,5 +184,6 @@ class InstallmentTest extends TestCase
         $response = $this->actingAs($this->user)->json('GET', 'api/user/installments/2');
         $response->assertStatus(200);
         $response->assertJsonStructure([['id', 'id_billing', 'status', 'debtor', 'emission_date', 'due_date', 'overdue_payment', 'amount', 'paid_amount']]);
+        DB::delete('delete from users where id = :id', ['id' => $this->user->getAttributes()['id']]);
     }
 }

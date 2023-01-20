@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repositories\Auth;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthRepository {
     public static function generateAkaNameUser($user) {
@@ -18,6 +19,21 @@ class AuthRepository {
     public static function getUserName($user) {
         return $user[0]['name'];
     }
+
+    public static function getTheUserWhoOwnsTheToken($token) {
+        return PersonalAccessToken::findToken($token)->tokenable()->get()->toArray();
+    }
+
+    public static function createResponseToRegister($token) {
+        $user = AuthRepository::getTheUserWhoOwnsTheToken($token);
+        return [
+            'token' => $token,
+            'id' => AuthRepository::getIdUser($user),
+            'name' => AuthRepository::getUserName($user),
+            'aka' => AuthRepository::generateAkaNameUser($user),
+        ];
+    }
+
 }
 
 ?>
