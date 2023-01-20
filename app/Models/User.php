@@ -84,6 +84,6 @@ class User extends Authenticatable
     }
 
     public function installments() {
-        return $this->hasMany(Installment::class);
+        return $this->hasMany(Installment::class, 'users_id');
     }
 }

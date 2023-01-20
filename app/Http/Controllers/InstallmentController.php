@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Installment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Repositories\Installment\InstallmentRepository;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -25,6 +26,18 @@ class InstallmentController extends Controller
         $filters = $request->query('filter');
         $installments = $this->installmentRepository->push($filters ?? null);
 
+        return response()->json($installments);
+    }
+
+    /**
+     * Display all installments based one only user
+     */
+    public function indexAllInstallmentsToUser($id) {
+        $user = User::find($id);
+        $installments = $user->installments()
+        ->select('id', 'id_billing', 'status', 'debtor', 'emission_date', 'due_date', 'overdue_payment', 'amount', 'paid_amount')
+        ->get()
+        ->toArray();
         return response()->json($installments);
     }
 

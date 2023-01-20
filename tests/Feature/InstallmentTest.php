@@ -169,4 +169,11 @@ class InstallmentTest extends TestCase
             'status'
         ]);
     }
+
+    public function test_see_all_installment_to_user() {
+        $this->user = User::factory()->create();
+        $response = $this->actingAs($this->user)->json('GET', 'api/user/installments/2');
+        $response->assertStatus(200);
+        $response->assertJsonStructure([['id', 'id_billing', 'status', 'debtor', 'emission_date', 'due_date', 'overdue_payment', 'amount', 'paid_amount']]);
+    }
 }
