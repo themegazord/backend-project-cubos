@@ -323,7 +323,7 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
         "users_id.exists": "Insira apenas um usuário válido",
         "id_billing.unique": "Já existe essa cobrança",
         "debtor.string": "O nome do devedor deve ser um texto",
-        "debtor.max_digits": "O nome do devedor deve conter no máximo 155 caracteres",
+        "debtor.max": "O nome do devedor deve conter no máximo 155 caracteres",
         "emission_date.date_format": "Formato inválido, formato correto -> YYYY-mm-dd",
         "due_date.date_format": "Formato inválido, formato correto -> YYYY-mm-dd",
         "due_date.due_date": "A data de vencimento não pode ser menor que a data de emissão",
@@ -410,7 +410,7 @@ O grupo é utilizado para manipular e receber dados referentes aos titulos.
     },
     "debtor": {
         "string",
-        "max_digits:155"
+        "max:155"
     },
     "emission_date": {
         "date",

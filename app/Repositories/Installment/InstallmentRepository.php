@@ -19,8 +19,6 @@ class InstallmentRepository {
             $nameInArray = explode(' ', trim($i['user']['name']));
             if(count($nameInArray) > 1) {
                 $i['user']['aka'] = strtoupper($nameInArray[0][0]) . strtoupper($nameInArray[count($nameInArray)-1][0]);
-            } else {
-                return $i['user']['aka'] = strtoupper($nameInArray[0][0]) . strtoupper($nameInArray[0][2]);
             }
             return $i;
         }, $arrayInstallments);

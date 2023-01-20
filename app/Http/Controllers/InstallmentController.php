@@ -69,8 +69,11 @@ class InstallmentController extends Controller
      * @param  \App\Models\Installment  $installment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Installment $installment)
+    public function update(Request $request, $id)
     {
+        $installment = new Installment();
+        $installment = $installment->find($id);
+        if(is_null($installment)) return response()->json(['error' => 'Installment not exists'], 404);
         $inst = $request->validate($installment->rules(), $installment->feedback());
         if(doubleval($inst['paid_amount']) > 0  && doubleval($inst['paid_amount']) < $installment->amount) {
             $inst['status'] = 'P';
@@ -85,17 +88,6 @@ class InstallmentController extends Controller
             $installment->update($inst);
             return response()->json($inst);
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Installment  $installment
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Installment $installment)
-    {
-        //
     }
 }
 

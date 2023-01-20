@@ -33,6 +33,7 @@ class AuthController extends Controller
         $user = new User;
         $credentials = $request->validate($user->rulesRegister(), $user->feedbackRegister());
         $credentials['password'] = Hash::make($credentials['password']);
+        $user->create($credentials);
         return response()->json(['msg' => 'User has been created'], 201);
     }
 }

@@ -65,11 +65,6 @@ class User extends Authenticatable
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required'
         ];
-
-        if ($this->exists) {
-            $rules['email'] .= ',email,' . $this->id;
-        }
-
         return $rules;
     }
 
