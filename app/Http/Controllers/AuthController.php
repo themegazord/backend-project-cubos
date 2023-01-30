@@ -2,30 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
+use App\Exceptions\AuthenticationException;
+use App\Http\Requests\UserLoginRequest;
+use App\Http\Requests\UserRegisterRequest;
 use Illuminate\Support\Facades\Hash;
-use App\Repositories\Auth\AuthRepository;
+use App\Services\Auth\AuthenticationService;
 
 class AuthController extends Controller
 {
-    public function login(Request $request) {
-        $user = new User;
+    public function __construct(private AuthenticationService $authenticationService)
+    {}
 
-        $credentials = $request->validate($user->rulesLogin(), $user->feedbackLogin());
-
-        if(!auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Invalid credentials'], 401);
+    public function login(UserLoginRequest $request) {
+        try {
+            $this->authenticationService->authenticate($request->only('email', 'password'));
+        } catch (AuthenticationException $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
-        $token = auth()->user()->createToken('create_token');
-        return response()->json(AuthRepository::createResponseToRegister($token->plainTextToken));
+        return response()->json([
+            'token' => auth()->user()->createToken('create_token')->plainTextToken,
+            'user' => $this->authenticationService->createResponse(auth()->user()->only(['id', 'name', 'email']))
+        ]);
     }
 
-    public function register(Request $request) {
-        $user = new User;
-        $credentials = $request->validate($user->rulesRegister(), $user->feedbackRegister());
+    public function register(UserRegisterRequest $request) {
+        $credentials = $request->only('name', 'email', 'password');
         $credentials['password'] = Hash::make($credentials['password']);
-        $user->create($credentials);
+
+        $this->authenticationService->create($credentials);
+
         return response()->json(['msg' => 'User has been created'], 201);
     }
 }

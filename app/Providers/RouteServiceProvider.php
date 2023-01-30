@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Repositories\Installment\InstallmentEloquentRepository;
+use App\Repositories\Installment\InstallmentRepositoryInterface;
+use App\Repositories\User\UserEloquentRepository;
+use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -35,7 +40,13 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+
+            Route::model('user', User::class);
         });
+
+        $this->app->bind(UserRepositoryInterface::class, UserEloquentRepository::class);
+        $this->app->bind(InstallmentRepositoryInterface::class, InstallmentEloquentRepository::class);
+
     }
 
     /**

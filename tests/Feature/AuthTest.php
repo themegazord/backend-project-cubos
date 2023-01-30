@@ -44,9 +44,7 @@ class AuthTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'token',
-            'id',
-            'name',
-            'aka'
+            'user'
         ]);
     }
 
@@ -58,9 +56,7 @@ class AuthTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'token',
-            'id',
-            'name',
-            'aka'
+            'user',
         ]);
     }
 
@@ -71,6 +67,6 @@ class AuthTest extends TestCase
             'password' => '123',
         ]);
         $response->assertStatus(401);
-        $response->assertJson(['error' => 'Invalid credentials']);
+        $response->assertJson(['error' => 'O email e a senha não são válidos']);
     }
 }

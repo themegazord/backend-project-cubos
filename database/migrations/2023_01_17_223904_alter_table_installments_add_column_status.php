@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('installments', function(Blueprint $table){
-            $table->enum('status', ['A', 'P', 'B'])->default('A')->after('id_billing');
+            $table->char('status')->default('A')->after('id_billing');
         });
     }
 
