@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('installments', function(Blueprint $table){
-            $table->char('status')->default('A')->after('id_billing');
+            $table->string('status')->default('Aberto')->after('id_billing');
         });
     }
 

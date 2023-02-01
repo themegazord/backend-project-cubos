@@ -19,7 +19,7 @@ class AuthenticationService {
     public function authenticate(array $credentials): void
     {
         if(!auth()->attempt($credentials)) {
-            throw AuthenticationException::EmailOrPasswordAreNotValid();
+            throw AuthenticationException::emailOrPasswordAreNotValid();
         }
     }
 
@@ -29,7 +29,7 @@ class AuthenticationService {
 
     }
 
-    public function generateAkaName(string $name): string {
+    private function generateAkaName(string $name): string {
         if(count($this->explodeName($name)) > 1) {
             return $this->explodeName($name)[0][0] . $this->explodeName($name)[count($this->explodeName($name)) - 1][0];
         } else {
@@ -37,7 +37,7 @@ class AuthenticationService {
         }
     }
 
-    public function explodeName(string $name): array {
+    private function explodeName(string $name): array {
         return explode(' ', $name);
     }
 }

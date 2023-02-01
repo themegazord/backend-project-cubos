@@ -6,14 +6,12 @@ use App\Http\Requests\InstallmentStoreUpdateRequest;
 use Illuminate\Http\Request;
 use App\Services\Installment\InstallmentService;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+
 class InstallmentController extends Controller
 {
     public function __construct(private InstallmentService $installmentService) {}
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function index(Request $request): JsonResponse
     {
         return response()->json($this->installmentService->paginate($request->query('filter') ?? null));
@@ -37,7 +35,7 @@ class InstallmentController extends Controller
             'paid_amount'
         ));
 
-        return response()->json(['msg' => 'Installment has been created'], 201);
+        return response()->json(['msg' => 'Installment has been created'], Response::HTTP_CREATED);
     }
 
     /**
@@ -48,7 +46,7 @@ class InstallmentController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        return response()->json($this->installmentService->findByid($id), 200);
+        return response()->json($this->installmentService->findByid($id));
     }
 
     /**

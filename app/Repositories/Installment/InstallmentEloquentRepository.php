@@ -28,7 +28,7 @@ class InstallmentEloquentRepository implements InstallmentRepositoryInterface {
         ->first();
     }
 
-    public function paginate(): array
+    public function allInstallments(): array
     {
         return Installment::with('user:id,name')
         ->select(
@@ -46,7 +46,7 @@ class InstallmentEloquentRepository implements InstallmentRepositoryInterface {
         ->toArray();
     }
 
-    public function paginateWithFilters(array $filtros): array {
+    public function allInstallmentsWithFilters(array $filtros): array {
         $installments = Installment::with('user:id,name');
         foreach($filtros as $f) {
             $installments->where($f[0], $f[1], $f[2]);

@@ -23,18 +23,20 @@ class InstallmentService {
         $installment->update($payload);
     }
 
-    public function determineStatusInstallment (array $installmentRequest, $id): array {
+    public function determineStatusInstallment (array $installmentRequest, int $id): array {
         $installment = $this->findById($id);
         if(doubleval($installmentRequest['paid_amount']) > 0  && doubleval($installmentRequest['paid_amount']) < $installment->amount) {
-            $installmentRequest['status'] = 'P';
+            $installmentRequest['status'] = 'Baixado parcialmente';
             $this->update($installmentRequest, $installment);
             return $installmentRequest;
-        } else if (doubleval($installmentRequest['paid_amount']) === $installment->amount) {
-            $installmentRequest['status'] = 'B';
+        }
+        if (doubleval($installmentRequest['paid_amount']) === $installment->amount) {
+            $installmentRequest['status'] = 'Baixado';
             $this->update($installmentRequest, $installment);
             return $installmentRequest;
-        } else {
-            $installmentRequest['status'] = 'A';
+        }
+        if (doubleval($installmentRequest['paid_amount']) == 0){
+            $installmentRequest['status'] = 'Aberto';
             $this->update($installmentRequest, $installment);
             return $installmentRequest;
         }
@@ -48,11 +50,11 @@ class InstallmentService {
     }
 
     public function getTheInstallmentsWhenThereIsNoFilter(): array {
-        return $this->installmentRepository->paginate();
+        return $this->installmentRepository->allInstallments();
     }
 
     public function getTheInstallmentWhenThereFilter(string $filtros): array {
-        return $this->installmentRepository->paginateWithFilters($this->explodeFilters($filtros));
+        return $this->installmentRepository->allInstallmentsWithFilters($this->explodeFilters($filtros));
     }
 
     public function explodeFilters(string $filtros): array {
