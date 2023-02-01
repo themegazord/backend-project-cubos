@@ -19,45 +19,45 @@ class InstallmentService {
         return $this->installmentRepository->findById($id);
     }
 
-    public function update(array $payload, Installment $installment): void {
+    private function update(array $payload, Installment $installment): void {
         $installment->update($payload);
     }
 
     public function determineStatusInstallment (array $installmentRequest, int $id): array {
         $installment = $this->findById($id);
         if(doubleval($installmentRequest['paid_amount']) > 0  && doubleval($installmentRequest['paid_amount']) < $installment->amount) {
-            $installmentRequest['status'] = 'Baixado parcialmente';
+            $installmentRequest['status'] = 'Partially paid';
             $this->update($installmentRequest, $installment);
             return $installmentRequest;
         }
         if (doubleval($installmentRequest['paid_amount']) === $installment->amount) {
-            $installmentRequest['status'] = 'Baixado';
+            $installmentRequest['status'] = 'Paid';
             $this->update($installmentRequest, $installment);
             return $installmentRequest;
         }
         if (doubleval($installmentRequest['paid_amount']) == 0){
-            $installmentRequest['status'] = 'Aberto';
+            $installmentRequest['status'] = 'Open';
             $this->update($installmentRequest, $installment);
             return $installmentRequest;
         }
     }
 
-    public function paginate(string $filtros = null): array {
+    public function allInstallments(string $filtros = null): array {
         if(is_null($filtros)) {
             return $this->determineIfInstallmentsAreOverduePayment($this->getTheInstallmentsWhenThereIsNoFilter());
         }
         return $this->determineIfInstallmentsAreOverduePayment($this->getTheInstallmentWhenThereFilter($filtros));
     }
 
-    public function getTheInstallmentsWhenThereIsNoFilter(): array {
+    private function getTheInstallmentsWhenThereIsNoFilter(): array {
         return $this->installmentRepository->allInstallments();
     }
 
-    public function getTheInstallmentWhenThereFilter(string $filtros): array {
+    private function getTheInstallmentWhenThereFilter(string $filtros): array {
         return $this->installmentRepository->allInstallmentsWithFilters($this->explodeFilters($filtros));
     }
 
-    public function explodeFilters(string $filtros): array {
+    private function explodeFilters(string $filtros): array {
         $filtrosTratados = [];
         $filtros = explode(';', $filtros);
         foreach($filtros as $filtro) {
@@ -66,7 +66,7 @@ class InstallmentService {
         return $filtrosTratados;
     }
 
-    public function determineIfInstallmentsAreOverduePayment(array $installmentRequest): array {
+    private function determineIfInstallmentsAreOverduePayment(array $installmentRequest): array {
         return array_map(function ($installment) {
             if ($installment['due_date'] < date('Y-m-d')) {
                 $installment['overdue_payment'] = 1;
