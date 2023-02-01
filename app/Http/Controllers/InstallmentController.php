@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\InstallmentException;
 use App\Http\Requests\InstallmentStoreUpdateRequest;
 use Illuminate\Http\Request;
 use App\Services\Installment\InstallmentService;
@@ -19,7 +20,8 @@ class InstallmentController extends Controller
 
     public function store(InstallmentStoreUpdateRequest $request): JsonResponse
     {
-        $this->installmentService->
+        try {
+            $this->installmentService->
             create(
                 $request->only(
                     'users_id',
@@ -31,8 +33,11 @@ class InstallmentController extends Controller
                     'amount',
                     'paid_amount'
                 )
-        );
-        return response()->json(['msg' => 'Installment has been created'], Response::HTTP_CREATED);
+            );
+            return response()->json(['msg' => 'Installment has been created'], Response::HTTP_CREATED);
+        } catch (InstallmentException $error) {
+            return response()->json(['error' => $error->getMessage()], $error->getCode());
+        }
     }
 
     public function show(int $id): JsonResponse

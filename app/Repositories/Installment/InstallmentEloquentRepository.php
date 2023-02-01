@@ -34,4 +34,10 @@ class InstallmentEloquentRepository implements InstallmentRepositoryInterface {
             ->get()
             ->toArray();
     }
+
+    public function findByIdBilling(int $id_billing): bool
+    {
+        return (bool)Installment::where('id_billing', $id_billing)
+                ->first();
+    }
 }

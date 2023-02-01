@@ -12,4 +12,5 @@ interface InstallmentRepositoryInterface {
 
     public function allInstallments(): array;
     public function allInstallmentsWithFilters(array $filtros): array;
+    public function findByIdBilling(int $id_billing): bool;
 }

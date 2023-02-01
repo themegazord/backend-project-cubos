@@ -2,6 +2,7 @@
 
 namespace App\Services\Installment;
 
+use App\Exceptions\InstallmentException;
 use App\Models\Installment;
 use App\Repositories\Installment\InstallmentRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
@@ -12,6 +13,9 @@ class InstallmentService {
     {}
 
     public function create(array $installment): void {
+        if($this->verifyExistsBilling($installment['id_billing'])) {
+            throw InstallmentException::billingAlreadyExists();
+        }
         $this->installmentRepository->create($installment);
     }
 
@@ -66,6 +70,7 @@ class InstallmentService {
         return $filtrosTratados;
     }
 
+    //todo verificar depois se está realmente atualizando o overdue_payment
     private function determineIfInstallmentsAreOverduePayment(array $installmentRequest): array {
         return array_map(function ($installment) {
             if ($installment['due_date'] < date('Y-m-d')) {
@@ -77,5 +82,9 @@ class InstallmentService {
             }
             return $installment;
         }, $installmentRequest);
+    }
+
+    private function verifyExistsBilling(int $id_billing):bool {
+        return $this->installmentRepository->findByIdBilling($id_billing);
     }
  }

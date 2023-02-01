@@ -12,7 +12,7 @@ class InstallmentStoreUpdateRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -22,7 +22,7 @@ class InstallmentStoreUpdateRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         Validator::extend('due_date', function ($attribute, $value, $parameters, $validator) {
             $emission_date = $validator->getData()[$parameters[0]];
@@ -36,11 +36,11 @@ class InstallmentStoreUpdateRequest extends FormRequest
             'emission_date' => 'date|date_format:"Y-m-d"',
             'due_date' => 'date|date_format:"Y-m-d"|due_date:emission_date',
             'amount' => 'numeric|min:1',
-            'paid_amount' => 'numeric|min:0|lte:amount'
+            'paid_amount' => 'numeric|min:1|lte:amount'
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'numeric' => 'Esse campo é apenas númerico',
@@ -59,7 +59,7 @@ class InstallmentStoreUpdateRequest extends FormRequest
             'amount.min' => 'O valor do titulo deve ser maior que 0',
 
             'paid_amount.min' => 'O valor do pagamento deve ser maior que 0',
-            'paid_amount.lte' => 'O valor do pagamento deve ser menor que o valor do titulo'
+            'paid_amount.lte' => 'O valor do pagamento deve ser menor ou igual que o valor do titulo'
         ];
     }
 }
