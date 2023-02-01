@@ -26,7 +26,6 @@ class AuthenticationService {
     public function createResponse(array $auth): array {
         $auth['aka'] = $this->generateAkaName($auth['name']);
         return $auth;
-
     }
 
     private function generateAkaName(string $name): string {

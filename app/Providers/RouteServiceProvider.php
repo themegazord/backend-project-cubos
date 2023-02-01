@@ -44,9 +44,6 @@ class RouteServiceProvider extends ServiceProvider
             Route::model('user', User::class);
         });
 
-        $this->app->bind(UserRepositoryInterface::class, UserEloquentRepository::class);
-        $this->app->bind(InstallmentRepositoryInterface::class, InstallmentEloquentRepository::class);
-
     }
 
     /**
