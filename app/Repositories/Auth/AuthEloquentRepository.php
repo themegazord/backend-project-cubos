@@ -11,4 +11,10 @@ class AuthEloquentRepository implements AuthRepositoryInterface {
     {
         User::create($credentials);
     }
+
+    public function findByEmail(string $email): bool
+    {
+        return (bool)User::where('email', $email)
+            ->first();
+    }
 }

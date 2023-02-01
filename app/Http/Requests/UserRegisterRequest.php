@@ -33,7 +33,7 @@ class UserRegisterRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'O campo nome é obrigátorio',
+            'name.required' => 'O campo nome é obrigatorio',
             'email.required' => 'O campo email é obrigatório',
             'password.required' => 'O campo de senha é obrigatório',
 

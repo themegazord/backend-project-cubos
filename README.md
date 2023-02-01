@@ -6,40 +6,6 @@
 2. Laravel 9.^
 3. Composer 2.5.^
 
-## Instalação PHP
-
-Irei ensinar a como instalar o PHP usando XAMPP, por que já matamos a questão do MySQL.
-
-1. [Clique aqui](https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/8.2.0/xampp-windows-x64-8.2.0-0-VS16-installer.exe) para fazer o download da versão 8.2.0 do XAMPP
-2. Clique em **Next**
-   ![XAMPP 1](public/readme/xampp_1.png)
-
-3. Clique em **Next**
-   ![XAMPP 1](public/readme/xampp_2.png)
-
-4. Clique em **Next**
-   ![XAMPP 1](public/readme/xampp_3.png)
-
-5. Clique em **Next**
-   ![XAMPP 1](public/readme/xampp_4.png)
-
-6. Clique em **Next**
-   ![XAMPP 1](public/readme/xampp_5.png)
-
-Espere a instalação terminar. No final das contas do XAMPP é famoso _full next_ ksks.
-
-## Instalação Composer
-
-1. [Clique aqui](https://getcomposer.org/Composer-Setup.exe) isso vai fazer com que seja baixado a ultima versão do Composer
-2. Clique em **Next**
-   ![Composer 1](public/readme/composer_1.png)
-3. Clique em **Next**
-   ![Composer 2](public/readme/composer_2.png)
-4. Clique em **Next**
-   ![Composer 3](public/readme/composer_3.png)
-5. Clique em **Install**
-   ![Composer 4](public/readme/composer_4.png)
-
 ## Clonagem e instalação das dependências
 
 Após tudo isso instalado com sucesso, crie uma pasta para comportar o clone do repositório usando e entre na pasta
@@ -117,105 +83,149 @@ Isso irá criar um servidor na porta 8000 por padrão, caso deseje executar em u
 php artisan serve --port=<numero-da-porta>
 ```
 
-## Endpoint
+# Endpoints
 
-Todas as endpoints da api serão `api/<nome-do-grupo>/<funcionalidade>`
+## Login
 
-### Grupo Auth
+Logar o usuário no sistema
 
-Responsável pelo registro e pelo login do mesmo.
+### Autenticação
 
-#### api/auth/login
+Essa rota não é autenticada
+
+### URL 
+`POST /api/auth/login`
+
+### Parametros de requisição
+| Parametro | Tipo   | Descrição           | Obrigatório? |
+|-----------|--------|---------------------|--------------|
+| email     | string | O e-mail do usuário | Sim          |
+| password  | string | A senha do usuário  | Sim          |
+
+### Exemplo de requisição
 
 ```json
-"method": "POST",
-"headers": {
-    "Accept": "application/json",
-},
-"body": {
-    "email": "",
-    "password": ""
-},
-"validation": {
-    "email": [
-        "required",
-        "email" //email valido
-    ],
-    "password": [
-        "required"
-    ]
-},
-"return": {
-    "isValid": {
-        {
-            "token": "token sha-256",
-            "id": 7,
-            "name": "Elenor DuBuque I",
-            "aka": "EI"
-        },
-        "code": 200
-    },
-    "isNotValid": {
-        "error": "Invalid credentials",
-        "code": 401,
-    },
-    "messageValidation": {
-        "email.required" : "O campo email é obrigatório",
-        "password.required" : "O campo senha é obrigátorio",
-        "email.email" : "O email é inválido",
+{
+    "email": "email@email.com",
+    "password": "password"
+}
+```
+
+### Parametros de resposta
+
+| Parâmetro | Tipo    | Descrição                                  |
+|-----------|---------|--------------------------------------------|
+| token     | string  | Token de autenticação gerado pelo sistema. |
+| user      | objeto  | Dados do usuário autenticado.              |
+| id        | inteiro | ID do usuário.                             |
+| name      | string  | Nome completo do usuário.                  |
+| email     | string  | Endereço de e-mail do usuário.             |
+| aka       | string  | Apelido do usuário.                        |
+
+### Exemplo da resposta
+
+```json
+{
+    "token": "2|Iv0rt1zQseX6izrIP800jlLYOAwL1U0rp4naIIf9",
+    "user": {
+        "id": 7,
+        "name": "Fulano de Tal",
+        "email": "fulano@email.com",
+        "aka": "FT"
     }
 }
 ```
 
-#### api/auth/register
+### Possibilidades de erros
+
+| Codígo | Resposta                        | Motivo                                                     |
+|--------|---------------------------------|------------------------------------------------------------|
+| 401    | O email e a senha são inválidos | Ao enviar e-mail e senhas que não combinam ou não existem  |
+| 422    | O e-mail é inválido             | Ao enviar algo que não seja um e-mail válido               |
+| 422    | O email é obrigatório           | Ao enviar o request sem o campo de e-mail ou foi em branco |
+| 422    | A senha é obrigatória           | Ao enviar o request sem a senha ou foi em branco           |
+
+## Registro
+
+Registrar o usuário no sistema.
+
+### URL
+
+`POST /api/auth/register`
+
+### Parametro de requisição
+
+| Parametro | Tipo   | Descrição        | Obrigatório? |
+|-----------|--------|------------------|--------------|
+| name      | string | Nome do usuário  | Sim          |
+| email     | string | Email do usuário | Sim          |
+| password  | string | Senha do usuário | Sim          |
+
+### Exemplo de requisição
 
 ```json
-"method": "POST",
-"headers": {
-    "Accept": "application/json",
-},
-"body": {
-    "name": "",
-    "email": "",
-    "password": ""
-},
-"validation": {
-    "name": {
-        "required",
-        "max:255",
-    },
-    "email": {
-        "required",
-        "email",
-        "max:255"
-    },
-    "password": {
-        "required"
-    }
-},
-"return": {
-    "isValid": {
-        "msg": "User has been created",
-        "code": 201
-    },
-    "isNotValid": {},
-    "messageValidation": {
-        "name.required": "O campo nome é obrigátorio",
-            "email.required": "O campo email é obrigatório",
-            "password.required": "O campo de senha é obrigatório",
-            "name.max": "O nome deve conter no máximo 255 caracteres",
-            "email.max": "O email deve conter no máximo 255 caracteres",
-            "email.email": "O email é inválido",
-            "email.unique": "Email já cadastrado",
-    }
+{
+    "name": "Fulado de Tal",
+    "email": "fulano@email.com",
+    "password": "password"
 }
 ```
 
-### Grupo Installments
+### Parametros de Resposta
 
-O grupo é utilizado para manipular e receber dados referentes aos titulos.
+| Parâmetro | Tipo   | Descrição             |
+|-----------|--------|-----------------------|
+| msg       | string | User has been created |
 
-#### api/installments
+### Exemplo de Resposta
+
+```json
+{
+    "msg": "User has been created"
+}
+```
+
+### Possibilidade de erro
+
+| Codígo | Resposta                                     | Motivo                                                           |
+|--------|----------------------------------------------|------------------------------------------------------------------|
+| 422    | O campo nome é obrigatorio                   | O campo name não foi inserido na requisição ou foi em branco     |
+| 422    | O campo email é obrigatorio                  | O campo email não foi inserido na requisição ou foi em branco    |
+| 422    | O campo de senha é obrigatorio               | O campo password não foi inserido na requisição ou foi em branco |
+| 422    | O nome deve conter no máximo 255 caracteres  | O campo name foi encaminhado com mais de 255 caracteres          |
+| 422    | O email deve conter no máximo 255 caracteres | O campo email foi encaminhado com mais de 255 caracteres         |
+| 422    | O email é inválido                           | Ao enviar ao que não seja um email válido                        |
+| 400    | O email já existe                            | Ao tentar cadastrar um e-mail já existente no banco de dados     |
+
+---
+
+## Listagem de Titulos
+
+Usado para listar todos os titulos existentes no banco de dados.
+
+### URL
+`GET /api/installments`
+
+### Parametro de requisição
+
+Não tem parametro
+
+### Filtros
+
+| Filtro | Exemplo                                             |
+|--------|-----------------------------------------------------|
+| `=`    | `/api/installments?filter=debtor:=:'Fulano de Tal'` |
+| `>`    | `/api/installments?filter=amount:>:50`              |
+| `<`    | `/api/installments?filter=amount:<:50`              |
+| `>=`   | `/api/installments?filter=amount:>=:50`             |
+| `<=`   | `/api/installments?filter=amount:<=:50`             |
+| `like` | `/api/installments?filter=debtor:like:'%Ful%'`      |
+
+Você também pode usar mais de um filtro, usando `;` para separar cada uma.
+
+### Exemplos
+
+`/api/installments?filter=debtor:=:'Fulano de Tal';amount:>:50`
 
 ```json
 "method": "GET",

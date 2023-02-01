@@ -2,10 +2,8 @@
 
 namespace App\Services\Auth;
 
-use Exception;
 use App\Exceptions\AuthenticationException;
 use App\Repositories\Auth\AuthRepositoryInterface;
-use Illuminate\Http\JsonResponse;
 
 class AuthenticationService {
     public function __construct(private AuthRepositoryInterface $authRepository)
@@ -13,6 +11,9 @@ class AuthenticationService {
 
     public function create(array $credentials): void
     {
+        if($this->verifyExistsEmail($credentials['email'])) {
+            throw AuthenticationException::emailExists();
+        }
         $this->authRepository->create($credentials);
     }
 
@@ -38,6 +39,10 @@ class AuthenticationService {
 
     private function explodeName(string $name): array {
         return explode(' ', $name);
+    }
+
+    private function verifyExistsEmail(string $email): bool {
+        return $this->authRepository->findByEmail($email);
     }
 }
 

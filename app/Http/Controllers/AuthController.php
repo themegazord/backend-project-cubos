@@ -22,17 +22,19 @@ class AuthController extends Controller
                 'token' => auth()->user()->createToken('create_token')->plainTextToken,
                 'user' => $this->authenticationService->createResponse(auth()->user()->only(['id', 'name', 'email']))
             ]);
-        } catch (AuthenticationException $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
+        } catch (AuthenticationException $error) {
+            return response()->json(['error' => $error->getMessage()], $error->getCode());
         }
     }
 
     public function register(UserRegisterRequest $request): JsonResponse {
         $credentials = $request->only('name', 'email', 'password');
         $credentials['password'] = Hash::make($credentials['password']);
-
-        $this->authenticationService->create($credentials);
-
-        return response()->json(['msg' => 'User has been created'], Response::HTTP_CREATED);
+        try {
+            $this->authenticationService->create($credentials);
+            return response()->json(['msg' => 'User has been created'], Response::HTTP_CREATED);
+        } catch (AuthenticationException $error) {
+            return response()->json(['error' => $error->getMessage()], $error->getCode());
+        }
     }
 }
