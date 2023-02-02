@@ -13,9 +13,7 @@ class InstallmentService {
     {}
 
     public function create(array $installment): void {
-        if($this->verifyExistsBilling($installment['id_billing'])) {
-            throw InstallmentException::billingAlreadyExists();
-        }
+        $this->verifyExistsBilling($installment['id_billing']);
         $this->installmentRepository->create($installment);
     }
 
@@ -24,7 +22,15 @@ class InstallmentService {
     }
 
     private function update(array $payload, int $id): void {
+        $this->verifyIsPossibleAlterIdBilling($payload, $id);
         $this->installmentRepository->update($payload, $id);
+    }
+
+    private function verifyIsPossibleAlterIdBilling(array $payload, int $id): InstallmentException|bool {
+        if(($this->findById($id)->id_billing != $payload['id_billing']) && $this->verifyExistsBilling($payload['id_billing'])) {
+            throw InstallmentException::billingAlreadyExists();
+        }
+        return false;
     }
 
     public function determineStatusInstallment (array $installmentRequest, int $id): array {
@@ -84,7 +90,10 @@ class InstallmentService {
         }, $installmentRequest);
     }
 
-    private function verifyExistsBilling(int $id_billing):bool {
-        return $this->installmentRepository->findByIdBilling($id_billing);
+    private function verifyExistsBilling(int $id_billing):InstallmentException|bool {
+        if($this->installmentRepository->findByIdBilling($id_billing)) {
+            throw InstallmentException::billingAlreadyExists();
+        }
+        return false;
     }
  }

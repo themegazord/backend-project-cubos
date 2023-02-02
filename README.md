@@ -358,16 +358,41 @@ Essa rota é autenticada
 |--------|-----------|----------------------------------------|
 | 404    | Not Found | Tentou consultar um titulo inexistente |
 
-#### api/installments/{id}
+## Atualizar titulos
+
+Utilizado para atualizar o titulo passado.
+
+### Autenticação
+
+Essa rota é autenticada
+
+### URL
+
+`POST /api/installments/{id}`
+
+### Parametro do endpoint
+
+| Parametro | Tipo    | Descrição    | Obrigatório? |
+|-----------|---------|--------------|--------------|
+| id        | inteiro | Id do titulo | Sim          |
+
+### Parametros da requisição
+
+| Parametro     | Tipo    | Descrição                                     | Obrigatório? |
+|---------------|---------|-----------------------------------------------|--------------|
+| users_id      | inteiro | Id do criador do titulo                       | Sim          |
+| id_billing    | inteiro | Id da cobrança                                | Sim          |
+| debtor        | string  | Nome do devedor                               | Sim          |
+| emission_date | string  | Data de emissão do titulo                     | Sim          |
+| due_date      | string  | Data do vencimento do titulo                  | Sim          |
+| amount        | float   | Valor do titulo                               | Sim          |
+| paid_amount   | float   | Valor pago do titulo                          | Sim          |
+| _method       | string  | Método utilizado para a rota `PUT` ou `PATCH` | Sim          |
+
+### Exemplo de requisição
 
 ```json
-"method": "POST",
-"headers": {
-    "Accept": "application/json",
-    "Authorization": "Bearer <token>"
-},
-"body": {
-    "id": 5,
+{
     "users_id": 7,
     "id_billing": 12704,
     "debtor": "Samantha Kshlerin",
@@ -376,82 +401,21 @@ Essa rota é autenticada
     "amount": 81.16,
     "paid_amount": 81.16,
     "_method": "PUT|PATCH"
-},
-"validation": {
-    "users_id": {
-        "exists",
-        "numeric"
-    },
-    "id_billing": {
-        "numeric",
-        "unique"
-    },
-    "debtor": {
-        "string",
-        "max:155"
-    },
-    "emission_date": {
-        "date",
-        "date_format:'Y-m-d'"
-    },
-    "due_date": {
-        "date",
-        "date_format:'Y-m-d'",
-        "due_date:emission_date"
-    },
-    "amount": {
-        "numeric",
-        "min:1"
-    },
-    "paid_amount": {
-        "numeric",
-        "min:0",
-        "lte:amount"
-    }
-},
-"return": {
-    "isValid": {
-        [
-            {
-                "id": 5,
-                "users_id": 7,
-                "id_billing": 12704,
-                "debtor": "Samantha Kshlerin",
-                "emission_date": "2023-01-14",
-                "due_date": "2023-02-15",
-                "amount": 81.16,
-                "paid_amount": 99.11,
-                "user": {
-                    "id": 7,
-                    "name": "Gustavo de Camargo Campos"
-                }
-            }
-        ],
-        "code": 200
-    },
-    "isNotValid": {
-        "unathenticated": {
-            "code": 401,
-            "message": "Unauthenticated."
-        },
-        "installment not exists": {
-            "code": 404,
-            "error": "Installment not exists",
-        }
-    },
-    "messageValidation": {
-        "numeric": "Esse campo é apenas númerico",
-        "date": "Esse campo é apenas para data",
-        "users_id.exists": "Insira apenas um usuário válido",
-        "id_billing.unique": "Já existe essa cobrança",
-        "debtor.string": "O nome do devedor deve ser um texto",
-        "debtor.max_digits": "O nome do devedor deve conter no máximo 155 caracteres",
-        "emission_date.date_format": "Formato inválido, formato correto -> YYYY-mm-dd",
-        "due_date.date_format": "Formato inválido, formato correto -> YYYY-mm-dd",
-        "due_date.due_date": "A data de vencimento não pode ser menor que a data de emissão",
-        "amount.min": "O valor do titulo deve ser maior que 0",
-        "paid_amount.min": "O valor do pagamento deve ser maior que 0",
-        "paid_amount.lte": "O valor do pagamento deve ser menor que o valor do titulo"
-    }
 }
 ```
+### Possibilidade de erro
+
+| Codígo | Resposta                                                           | Motivo                                                                  |
+|--------|--------------------------------------------------------------------|-------------------------------------------------------------------------|
+| 422    | Esse campo é apenas númerico                                       | Ao tentar encaminhar algo que não seja númerico no campo                |
+| 422    | Esse campo é apenas data                                           | Ao tentar encaminhar algo que não seja data no campo                    |
+| 422    | Insira apenas um usuário válido                                    | Ao tentar passar um código de usuário inexistente no `users_id`         |
+| 422    | O nome do devedor deve ser um texto                                | Ao tentar passar algo diferente de `string` no campo `debtor`           |
+| 422    | O nome do devedor deve conter no máximo 155 caracteres             | Ao tentar encaminhar um nome do `debtor` maior que 155 caracteres       |
+| 422    | Formato inválido, formato correto -> YYYY-mm-dd                    | Ao inserir um padrão de data diferente de `YYYY-mm-dd`                  |
+| 422    | A data de vencimento não pode ser menor que a data de emissão      | Ao passar a data de vencimento menor que a data de emissão              |
+| 422    | O valor do titulo deve ser maior que 0                             | Ao passar um valor menor ou igual a 0 como valor do titulo              |
+| 422    | O valor do pagamento deve ser maior que 0                          | Ao passar um valor menor ou igual a 0 como valor do pagamento           |
+| 422    | O valor do pagamento deve ser menor ou igual que o valor do titulo | Ao passar um valor pago maior que o valor do titulo                     |
+| 400    | A cobrança já existe                                               | Ao tentar criar ou mudar um titulo inserindo uma cobrança que já existe |
+

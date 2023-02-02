@@ -47,7 +47,11 @@ class InstallmentController extends Controller
 
     public function update(InstallmentStoreUpdateRequest $request, int $id): JsonResponse
     {
-        return response()->json($this->installmentService->determineStatusInstallment($request->all(), $id));
+        try {
+            return response()->json($this->installmentService->determineStatusInstallment($request->all(), $id));
+        } catch (InstallmentException $error) {
+            return response()->json(['error' => $error->getMessage()], $error->getCode());
+        }
     }
 }
 
