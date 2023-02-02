@@ -23,25 +23,25 @@ class InstallmentService {
         return $this->installmentRepository->findById($id);
     }
 
-    private function update(array $payload, Installment $installment): void {
-        $installment->update($payload);
+    private function update(array $payload, int $id): void {
+        $this->installmentRepository->update($payload, $id);
     }
 
     public function determineStatusInstallment (array $installmentRequest, int $id): array {
         $installment = $this->findById($id);
         if(doubleval($installmentRequest['paid_amount']) > 0  && doubleval($installmentRequest['paid_amount']) < $installment->amount) {
             $installmentRequest['status'] = 'Partially paid';
-            $this->update($installmentRequest, $installment);
+            $this->update($installmentRequest, $installment['id']);
             return $installmentRequest;
         }
         if (doubleval($installmentRequest['paid_amount']) === $installment->amount) {
             $installmentRequest['status'] = 'Paid';
-            $this->update($installmentRequest, $installment);
+            $this->update($installmentRequest, $installment['id']);
             return $installmentRequest;
         }
         if (doubleval($installmentRequest['paid_amount']) == 0){
             $installmentRequest['status'] = 'Open';
-            $this->update($installmentRequest, $installment);
+            $this->update($installmentRequest, $installment['id']);
             return $installmentRequest;
         }
     }
@@ -65,22 +65,22 @@ class InstallmentService {
         $filtrosTratados = [];
         $filtros = explode(';', $filtros);
         foreach($filtros as $filtro) {
-            array_push($filtrosTratados, explode(':', $filtro));
+            $filtrosTratados[] = explode(':', $filtro);
         }
         return $filtrosTratados;
     }
 
-    //todo verificar depois se está realmente atualizando o overdue_payment
     private function determineIfInstallmentsAreOverduePayment(array $installmentRequest): array {
         return array_map(function ($installment) {
             if ($installment['due_date'] < date('Y-m-d')) {
                 $installment['overdue_payment'] = 1;
-                $this->update($installment, $this->findById($installment['id']));
-            } else {
-                $installment['overdue_payment'] = 0;
-                $this->update($installment, $this->findById($installment['id']));
+                return $this->determineStatusInstallment($installment, $installment['id']);
             }
-            return $installment;
+            if ($installment['due_date'] >= date('Y-m-d')) {
+                $installment['overdue_payment'] = 0;
+                $this->update($installment, $installment['id']);
+                return $this->determineStatusInstallment($installment, $installment['id']);
+            }
         }, $installmentRequest);
     }
 

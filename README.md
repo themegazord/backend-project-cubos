@@ -303,52 +303,60 @@ Essa rota é autenticada
 | 422    | O valor do pagamento deve ser menor ou igual que o valor do titulo | Ao passar um valor pago maior que o valor do titulo                     |
 | 400    | A cobrança já existe                                               | Ao tentar criar ou mudar um titulo inserindo uma cobrança que já existe |
 
+## Consulta único titulo
 
-#### api/installments/{id}
+Retornará o titulo que for passado como parametro do endpoint
 
+### Autenticação
+
+Essa rota é autenticada
+
+### URL
+
+`GET /api/installments/{id}`
+
+### Parametros do endpoint
+
+| Parametro | Tipo    | Descrição    | Obrigatório? |
+|-----------|---------|--------------|--------------|
+| id        | inteiro | Id do titulo | Sim          |
+
+### Parametros de resposta
+
+| Parâmetro       | Tipo    | Descrição                                                                   |
+|-----------------|---------|-----------------------------------------------------------------------------|
+| id              | inteiro | Id do titulo                                                                |
+| users_id        | inteiro | Id do criador do titulo                                                     |
+| id_billing      | inteiro | Id da cobrança                                                              |
+| status          | string  | Define o status do titulos que varia entre `Open`, `Partially Paid`, `Paid` |
+| debtor          | string  | Nome do devedor                                                             |
+| emission_date   | string  | Data de emissão do titulo                                                   |
+| due_date        | string  | Data do vencimento do titulo                                                |
+| overdue_payment | bool    | Define se o titulo está vencido ou não                                      |
+| amount          | float   | Valor do titulo                                                             |
+| paid_amount     | float   | Valor pago do titulo                                                        |
+
+### Exemplo de resposta
 ```json
-"method": "GET",
-"headers": {
-    "Accept": "application/json",
-    "Authorization": "Bearer <token>"
-},
-"body": {},
-"validation": {},
-"return": {
-    "isValid": {
-        [
-            {
-                "id": 5,
-                "users_id": 7,
-                "id_billing": 12704,
-                "status": "P",
-                "debtor": "Samantha Kshlerin",
-                "emission_date": "2023-01-14",
-                "due_date": "2023-02-15",
-                "overdue_payment": 1,
-                "amount": 81.16,
-                "paid_amount": 99.11,
-                "user": {
-                    "id": 7,
-                    "name": "Gustavo de Camargo Campos"
-                }
-            }
-        ],
-        "code": 200
-    },
-    "isNotValid": {
-        "unathenticated": {
-            "code": 401,
-            "message": "Unauthenticated."
-        },
-        "installment not exists": {
-            "code": 404,
-            "error": "Installment not exists",
-        }
-    },
-    "messageValidation": {}
+{
+    "id": 5,
+    "users_id": 7,
+    "id_billing": 12704,
+    "status": "P",
+    "debtor": "Samantha Kshlerin",
+    "emission_date": "2023-01-14",
+    "due_date": "2023-02-15",
+    "overdue_payment": 1,
+    "amount": 81.16,
+    "paid_amount": 99.11
 }
 ```
+
+### Possibilidade de erro
+
+| Codígo | Resposta  | Motivo                                 |
+|--------|-----------|----------------------------------------|
+| 404    | Not Found | Tentou consultar um titulo inexistente |
 
 #### api/installments/{id}
 
@@ -447,29 +455,3 @@ Essa rota é autenticada
     }
 }
 ```
-
-## Query params
-
-Caso um dos endpoint contenha em sua documentação da _key_ `"parameters": true` você poderá utilizar da query parameter determinada no endpoint na key `type`
-
-Ex: Caso o `type` seja `filter` o endpoint ficará `<endpoint>?filter=<parametros>`
-
-### Parametros
-
-Os parametros sempre vão ser separados por `;` e internamente por `:`.
-Ex: Você deseja que tal endpoint traga apenas os dados que contêm `overdue_payment = 1` e `amount > 100`, o filtro ficaria da seguinte forma: `<endpoint>?filter=overdue_payment:=:1;amount:>:100`.
-O separador `:` vai ser utilizado para definir o que é coluna, o que é operador e o que é valor e o operador de `;` é utilizado para separar um parametro de busca de outro.
-
-### Operadores
-
-Os operadores aceitaveis são:
-
-1. `=` -> Utilizado para comparar um valor com o conteúdo de uma coluna. Exemplo `amount:=:100`;
-2. `<>` ou `!=` -> Utilizado para comparar um valor com o conteúdo de uma coluna, retornando todos os resultados onde o valor é diferente. Exemplo `amount:<>:100`;
-3. `>` -> Utilizado para comparar um valor com o conteúdo de uma coluna, retornando todos os resultados onde o valor é maior. Exemplo `amount:>:100`;
-4. `>=` -> Utilizado para comparar um valor com o conteúdo de uma coluna, retornando todos os resultados onde o valor é maior ou igual. Exemplo `amount:>=:100`;
-5. `<` -> Utilizado para comparar um valor com o conteúdo de uma coluna, retornando todos os resultados onde o valor é menor. Exemplo `amount:<:100`;
-6. `<=` -> Utilizado para comparar um valor com o conteúdo de uma coluna, retornando todos os resultados onde o valor é menor ou igual. Exemplo `amount:<=:100`;
-7. `LIKE` -> Utilizado para comparar um valor com o conteúdo de uma coluna, retornando todos os resultados onde o valor é semelhante. Exemplo `debtor:LIKE:%Ant%`;
-   
-Todos esses operadores podem ser encontrados em documentações de `where clauses` de banco de dados relacionais como MySQL, SQL, Firebird e afins.

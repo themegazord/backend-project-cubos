@@ -14,8 +14,7 @@ class InstallmentEloquentRepository implements InstallmentRepositoryInterface {
     }
 
     public function findById(int $id): Installment {
-        return Installment::findOrFail($id)
-            ->first();
+        return Installment::findOrFail($id);
     }
 
     public function allInstallments(): array
@@ -39,5 +38,10 @@ class InstallmentEloquentRepository implements InstallmentRepositoryInterface {
     {
         return (bool)Installment::where('id_billing', $id_billing)
                 ->first();
+    }
+
+    public function update(array $payload, int $id): void
+    {
+       Installment::find($id)->update($payload);
     }
 }
