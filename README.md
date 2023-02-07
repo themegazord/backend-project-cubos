@@ -85,6 +85,8 @@ php artisan serve --port=<numero-da-porta>
 
 # Endpoints
 
+## Autenticação
+
 ## Login
 
 Logar o usuário no sistema
@@ -199,9 +201,11 @@ Essa rota não é autenticada
 | 422    | O nome deve conter no máximo 255 caracteres  | O campo name foi encaminhado com mais de 255 caracteres          |
 | 422    | O email deve conter no máximo 255 caracteres | O campo email foi encaminhado com mais de 255 caracteres         |
 | 422    | O email é inválido                           | Ao enviar ao que não seja um email válido                        |
-| 400    | O email já existe                            | Ao tentar cadastrar um e-mail já existente no banco de dados     |
+| 401    | O email já existe                            | Ao tentar cadastrar um e-mail já existente no banco de dados     |
 
 ---
+
+## Titulos
 
 ## Listagem de Titulos
 
@@ -403,6 +407,35 @@ Essa rota é autenticada
     "_method": "PUT|PATCH"
 }
 ```
+| Parâmetro       | Tipo    | Descrição                                                                   |
+|-----------------|---------|-----------------------------------------------------------------------------|
+| users_id        | inteiro | Id do criador do titulo                                                     |
+| id_billing      | inteiro | Id da cobrança                                                              |
+| status          | string  | Define o status do titulos que varia entre `Open`, `Partially Paid`, `Paid` |
+| debtor          | string  | Nome do devedor                                                             |
+| emission_date   | string  | Data de emissão do titulo                                                   |
+| due_date        | string  | Data do vencimento do titulo                                                |
+| overdue_payment | bool    | Define se o titulo está vencido ou não                                      |
+| amount          | float   | Valor do titulo                                                             |
+| paid_amount     | float   | Valor pago do titulo                                                        |
+| _method         | string  | Método usado na requisição                                                  |
+
+### Exemplo de resposta
+
+```json
+{
+    "users_id": "3",
+    "id_billing": "94312",
+    "debtor": "Fulano de Tal",
+    "emission_date": "2023-01-05",
+    "due_date": "2023-02-01",
+    "amount": "54.48",
+    "paid_amount": "26.53",
+    "_method": "PATCH",
+    "status": "Partially paid"
+}
+```
+
 ### Possibilidade de erro
 
 | Codígo | Resposta                                                           | Motivo                                                                  |
@@ -419,3 +452,115 @@ Essa rota é autenticada
 | 422    | O valor do pagamento deve ser menor ou igual que o valor do titulo | Ao passar um valor pago maior que o valor do titulo                     |
 | 400    | A cobrança já existe                                               | Ao tentar criar ou mudar um titulo inserindo uma cobrança que já existe |
 
+---
+
+## Usuários
+
+## Atualização de usuários
+
+Atualiza os dados do usuário passado como parametro da rota
+
+### Autenticação
+
+Essa rota é autenticada
+
+### URL
+
+`POST /api/users/{id}`
+
+### Parametro do endpoint
+
+| Parametro | Tipo    | Descrição     | Obrigatório? |
+|-----------|---------|---------------|--------------|
+| Id        | inteiro | Id do usuário | Sim          |
+
+### Parametro da requisição
+
+| Parametro | Tipo             | Descrição           | Obrigatório? |
+|-----------|------------------|---------------------|--------------|
+| name      | string           | Nome do usuário     | Sim          |
+| email     | string           | Email do usuário    | Sim          |
+| password  | string           | Senha do usuário    | Sim          |
+| cpf       | string `or` null | CPF do usuário      | Não          |
+| phone     | string `or` null | Telefone do usuário | Não          |
+
+### Exemplo de requisição
+
+```json
+{
+    "name": "Gustavo de Camargo Campos",
+    "email": "contato.wanjalagus@outlook.com.br",
+    "password": "password",
+    "cpf": "01234567891",
+    "phone": "67999999999"
+}
+```
+### Parametro da resposta
+
+| Parametro | Tipo   | Descrição           |
+|-----------|--------|---------------------|
+| msg       | string | Mensagem do retorno |
+| error     | string | Mensagem de erro    |
+
+### Posibilidade de Erros
+
+| Codígo | Resposta                                      | Motivo                                                           |
+|--------|-----------------------------------------------|------------------------------------------------------------------|
+| 422    | O campo nome é obrigatorio                    | O campo name não foi inserido na requisição ou foi em branco     |
+| 422    | O campo email é obrigatorio                   | O campo email não foi inserido na requisição ou foi em branco    |
+| 422    | O campo de senha é obrigatorio                | O campo password não foi inserido na requisição ou foi em branco |
+| 422    | O nome deve conter no máximo 255 caracteres   | O campo name foi encaminhado com mais de 255 caracteres          |
+| 422    | O email deve conter no máximo 255 caracteres  | O campo email foi encaminhado com mais de 255 caracteres         |
+| 422    | O email é inválido                            | Ao enviar ao que não seja um email válido                        |
+| 422    | O CPF deve conter no máximo 11 digitos        | Ao encaminhar um CPF com mais de 11 digitos                      |
+| 422    | O telefone deve conter no máximo 20 digitos   | Ao telefone encaminhar um telefone com mais de 20 digitos        |                                                  
+| 422    | O CPF inserido não é matematicamente válido   | Ao tentar encaminhar um CPF matematicamente inváilido            |
+| 401    | O email já está sendo usado por outro usuário | Ao tentar cadastrar um e-mail já existente no banco de dados     |
+| 401    | O CPF já está cadastrado em outro usuário     | Ao tentar cadastrar um CPF já existente                          |
+| 404    | Usuário não existe                            | Ao passar um id de usuário inexistente                           |
+
+## Consulta dados do usuário
+
+Retorna os dados do usuário que foi passado como parametro
+
+### Autenticação
+
+Essa rota é autenticada
+
+### URL
+
+`POST /api/installments/{id}`
+
+### Parametro do endpoint
+
+| Parametro | Tipo    | Descrição    | Obrigatório? |
+|-----------|---------|--------------|--------------|
+| id        | inteiro | Id do titulo | Sim          |
+
+### Parametro de resposta
+
+| Parametro | Tipo             | Descrição           |
+|-----------|------------------|---------------------|
+| id        | int              | Id do usuário       |
+| name      | string           | Nome do usuário     |
+| email     | string           | Email do usuário    |
+| cpf       | string `or` null | CPF do usuário      |
+| phone     | string `or` null | Telefone do usuário |
+
+
+### Exemplo de resposta
+
+    {
+        "id": 1,
+        "name": "Gustavo de Camargo Campos",
+        "email": "contato.wanjalagus@outlook.com.br",
+        "cpf": "01234567891",
+        "phone": "67912345678"
+    }
+
+
+### Possibilidade de erros
+
+| Código | Resposta           | Motivo                                      |
+|--------|--------------------|---------------------------------------------|
+| 404    | Usuário não existe | Ao passar o id de um usuário que não existe |

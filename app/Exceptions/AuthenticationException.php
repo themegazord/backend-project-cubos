@@ -12,6 +12,6 @@ class AuthenticationException extends Exception
     }
 
     public static function emailExists(): self{
-        throw new self('O email já existe', Response::HTTP_BAD_REQUEST);
+        throw new self('O email já existe', Response::HTTP_UNAUTHORIZED);
     }
  }

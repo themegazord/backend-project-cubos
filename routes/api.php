@@ -23,3 +23,4 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->apiResource('installments', InstallmentController::class);
+Route::middleware('auth:sanctum')->apiResource('users', UserController::class);

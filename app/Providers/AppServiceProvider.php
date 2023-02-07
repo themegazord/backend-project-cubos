@@ -6,6 +6,8 @@ use App\Repositories\Installment\InstallmentEloquentRepository;
 use App\Repositories\Installment\InstallmentRepositoryInterface;
 use App\Repositories\Auth\AuthRepositoryInterface;
 use App\Repositories\Auth\AuthEloquentRepository;
+use App\Repositories\User\UserEloquentRepository;
+use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,9 +27,10 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot():void
     {
         $this->app->bind(AuthRepositoryInterface::class, AuthEloquentRepository::class);
         $this->app->bind(InstallmentRepositoryInterface::class, InstallmentEloquentRepository::class);
+        $this->app->bind(UserRepositoryInterface::class, UserEloquentRepository::class);
     }
 }
