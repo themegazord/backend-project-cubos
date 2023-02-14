@@ -10,21 +10,17 @@ use Illuminate\Support\Str;
  */
 class InstallmentFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition()
+    public function definition(): array
     {
+        $amount = $this->faker->randomFloat(2, 20, 100);
         return [
-            'users_id' => fake()->numberBetween(1, 7),
-            'id_billing' => fake()->unique()->randomNumber(5, true),
-            'debtor' => fake()->name(),
-            'emission_date' => fake()->dateTimeBetween('-1 month', 'now'),
-            'due_date' => fake()->dateTimeBetween('now', '1 month'),
-            'amount' => fake()->randomFloat(2, 20, 100),
-            'paid_amount' => fake()->randomFloat(2, 20, 100),
+            'users_id' => $this->faker->numberBetween(1, 7),
+            'id_billing' => $this->faker->randomNumber(5, true),
+            'debtor_id' => $this->faker->numberBetween(1, 5),
+            'emission_date' => $this->faker->dateTimeBetween('-1 month'),
+            'due_date' => $this->faker->dateTimeBetween('now', '1 month'),
+            'amount' => $amount,
+            'paid_amount' => $this->faker->randomFloat(2, 20, $amount),
         ];
     }
 }

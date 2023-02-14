@@ -9,6 +9,9 @@ class AuthenticationService {
     public function __construct(private AuthRepositoryInterface $authRepository)
     {}
 
+    /**
+     * @throws AuthenticationException
+     */
     public function create(array $credentials): void
     {
         if($this->verifyExistsEmail($credentials['email'])) {
@@ -17,6 +20,9 @@ class AuthenticationService {
         $this->authRepository->create($credentials);
     }
 
+    /**
+     * @throws AuthenticationException
+     */
     public function authenticate(array $credentials): void
     {
         if(!auth()->attempt($credentials)) {

@@ -26,7 +26,7 @@ class InstallmentController extends Controller
                 $request->only(
                     'users_id',
                     'id_billing',
-                    'debtor',
+                    'debtor_id',
                     'emission_date',
                     'due_date',
                     'overdue_payment',

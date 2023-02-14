@@ -17,11 +17,6 @@ class InstallmentStoreUpdateRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
     public function rules(): array
     {
         Validator::extend('due_date', function ($attribute, $value, $parameters, $validator) {
@@ -32,11 +27,11 @@ class InstallmentStoreUpdateRequest extends FormRequest
         return [
             'users_id' => 'exists:users,id|numeric',
             'id_billing' => 'numeric',
-            'debtor'=> 'string|max:155',
+            'debtor_id'=> 'integer|exists:debtors,id',
             'emission_date' => 'date|date_format:"Y-m-d"',
             'due_date' => 'date|date_format:"Y-m-d"|due_date:emission_date',
             'amount' => 'numeric|min:1',
-            'paid_amount' => 'numeric|min:1|lte:amount'
+            'paid_amount' => 'numeric|min:0|lte:amount'
         ];
     }
 
@@ -48,8 +43,8 @@ class InstallmentStoreUpdateRequest extends FormRequest
 
             'users_id.exists' => 'Insira apenas um usuário válido',
 
-            'debtor.string' => 'O nome do devedor deve ser um texto',
-            'debtor.max' => 'O nome do devedor deve conter no máximo 155 caracteres',
+            'debtor_id.integer' => 'O campo de devedor aceita apenas inteiros',
+            'debtor_id.exists' => 'Insira um devedor que exista.',
 
             'emission_date.date_format' => 'Formato inválido, formato correto -> YYYY-mm-dd',
 
