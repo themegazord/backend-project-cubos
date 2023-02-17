@@ -1,6 +1,6 @@
 # Backend Finance Cubo's Acadaemy
 ![version](https://img.shields.io/badge/DocVersion-0.0.3-informational)
-![version](https://img.shields.io/badge/AppVersion-2.0.0-informational)
+![version](https://img.shields.io/badge/AppVersion-2.1.0-informational)
 
 ## Requisitos
 
@@ -10,7 +10,7 @@
 
 ## Sumário
 
-- [Helpers](./doc/helpers/helpers.md)
+- [Helpers](/doc/helpers/helpers.md)
 - Endpoints
   - Autenticação
     - [Login](/doc/auth/login.md)
@@ -20,6 +20,7 @@
     - [Cadastro de Titulos](/doc/installments/add-installments.md)
     - [Consulta única de titulos](/doc/installments/show-installments.md)
     - [Atualiza titulos](/doc/installments/update-installments.md)
+    - [Exclusão de titulo](/doc/installments/destroy-installments.md)
   - Usuários
     - [Atualização de usuários](/doc/users/update-user.md)
     - [Consulta dados do usuário](/doc/users/show-user.md)
@@ -29,6 +30,6 @@
     - [Cadastro de clientes](/doc/debtors/store-debtors.md)
     - [Consulta um único cliente](/doc/debtors/show-debtors.md)
     - [Atualização de cadastro do cliente](/doc/debtors/update-debtors.md)
-    - [Deletar um cliente](/doc/debtors/destroy-debtors.md)
+    - [Exclusão de cliente](/doc/debtors/destroy-debtors.md)
     - [Listagem dos clientes em dia](/doc/debtors/payers-debtors.md)
     - [Listagem dos clientes inadimplentes](/doc/debtors/defaulters-debtors.md)
