@@ -20,12 +20,14 @@ class InstallmentEloquentRepository implements InstallmentRepositoryInterface {
     public function allInstallments(): array
     {
         return Installment::with('user:id,name')
+            ->with('debtor:id,name')
             ->get()
             ->toArray();
     }
 
     public function allInstallmentsWithFilters(array $filtros): array {
-        $installments = Installment::with('user:id,name');
+        $installments = Installment::with('user:id,name')
+            ->with('debtor:id,name');
         foreach($filtros as $filtro) {
             $installments->where($filtro[0], $filtro[1], $filtro[2]);
         }
