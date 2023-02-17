@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InstallmentException;
 use App\Http\Requests\InstallmentStoreUpdateRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Services\Installment\InstallmentService;
 use Illuminate\Http\JsonResponse;
@@ -51,6 +52,19 @@ class InstallmentController extends Controller
             return response()->json($this->installmentService->determineStatusInstallment($request->all(), $id));
         } catch (InstallmentException $error) {
             return response()->json(['error' => $error->getMessage()], $error->getCode());
+        }
+    }
+
+    /**
+     * @throws InstallmentException
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        try {
+            $this->installmentService->verifyPossibilityToDeleteAInstallment($id);
+            return response()->json([], Response::HTTP_NO_CONTENT);
+        } catch (InstallmentException $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getCode());
         }
     }
 }

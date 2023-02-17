@@ -21,18 +21,9 @@ class InstallmentService {
         return $this->installmentRepository->findById($id);
     }
 
-    private function update(array $payload, int $id): void {
-        $this->verifyIsPossibleAlterIdBilling($payload, $id);
-        $this->installmentRepository->update($payload, $id);
-    }
-
-    private function verifyIsPossibleAlterIdBilling(array $payload, int $id): InstallmentException|bool {
-        if(($this->findById($id)->id_billing != $payload['id_billing']) && $this->verifyExistsBilling($payload['id_billing'])) {
-            throw InstallmentException::billingAlreadyExists();
-        }
-        return false;
-    }
-
+    /**
+     * @throws InstallmentException
+     */
     public function determineStatusInstallment (array $installmentRequest, int $id): array {
         $installment = $this->findById($id);
         if(doubleval($installmentRequest['paid_amount']) > 0  && doubleval($installmentRequest['paid_amount']) < $installment->amount) {
@@ -51,13 +42,47 @@ class InstallmentService {
             return $installmentRequest;
         }
     }
-
     public function allInstallments(string $filtros = null): array {
         if(is_null($filtros)) {
             return $this->determineIfInstallmentsAreOverduePayment($this->getTheInstallmentsWhenThereIsNoFilter());
         }
         return $this->determineIfInstallmentsAreOverduePayment($this->getTheInstallmentWhenThereFilter($filtros));
     }
+
+    /**
+     * @throws InstallmentException
+     */
+    public function verifyPossibilityToDeleteAInstallment(int $id): void
+    {
+        $this->checkIfInstallmentExists($id);
+        $this->checkIfInstallmentItPartiallyPaid($id);
+        $this->checkIfInstallmentItOverdue($id);
+        $this->destroy($id);
+    }
+
+    private function destroy(int $id): void
+    {
+        $this->installmentRepository->destroy($id);
+    }
+    /**
+     * @throws InstallmentException
+     */
+    private function update(array $payload, int $id): void {
+        $this->verifyIsPossibleAlterIdBilling($payload, $id);
+        $this->installmentRepository->update($payload, $id);
+    }
+
+    /**
+     * @throws InstallmentException
+     */
+    private function verifyIsPossibleAlterIdBilling(array $payload, int $id): void
+    {
+        if(($this->findById($id)->id_billing != $payload['id_billing']) && $this->verifyExistsBilling($payload['id_billing'])) {
+            throw InstallmentException::billingAlreadyExists();
+        }
+    }
+
+
 
     private function getTheInstallmentsWhenThereIsNoFilter(): array {
         return $this->installmentRepository->allInstallments();
@@ -90,10 +115,44 @@ class InstallmentService {
         }, $installmentRequest);
     }
 
+    /**
+     * @throws InstallmentException
+     */
     private function verifyExistsBilling(int $id_billing):InstallmentException|bool {
         if($this->installmentRepository->findByIdBilling($id_billing)) {
             throw InstallmentException::billingAlreadyExists();
         }
         return false;
+    }
+
+    /**
+     * @throws InstallmentException
+     */
+    private function checkIfInstallmentItPartiallyPaid(int $id): void
+    {
+        if($this->installmentRepository->checkIfInstallmentItPartiallyPaid($id)) throw InstallmentException::installmentItPartiallyPaid();
+    }
+
+    /**
+     * @throws InstallmentException
+     */
+    private function checkIfInstallmentItOverdue(int $id): void
+    {
+        if($this->installmentRepository->checkIfInstallmentItOverdue($id)) throw InstallmentException::installmentItOverdue();    }
+
+    /**
+     * @throws InstallmentException
+     */
+    private function checkIfDebtorIsDebtor(int $id): void
+    {
+        if($this->installmentRepository->checkIfDebtorIsDebtor($id)) throw InstallmentException::debtorIsDebtor();
+    }
+
+    /**
+     * @throws InstallmentException
+     */
+    private function checkIfInstallmentExists(int $id): void
+    {
+        if(!$this->installmentRepository->checkIfInstallmentExists($id)) throw InstallmentException::installmentNotExists();
     }
  }

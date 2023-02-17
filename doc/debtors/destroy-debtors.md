@@ -31,7 +31,7 @@ Não tem parametro
 
 | Codígo | Resposta                                               | Motivo                                                                        |
 |--------|--------------------------------------------------------|-------------------------------------------------------------------------------|
-| 404    | O cliente não existe                                   | Ao tentar atualizar um cliente que não existe                                 |
+| 404    | O cliente não existe                                   | Ao tentar apagar um cliente que não existe                                    |
 | 401    | O cliente contêm um ou mais titulos vencidos           | Ao tentar apagar um cliente que tenha um ou mais titulos vencidos em seu nome |
 | 401    | O cliente contêm um ou mais titulos parcialmente pagos | Ao tentar apagar um cliente que tenha um ou mais titulos parcialmente pagos   |
 

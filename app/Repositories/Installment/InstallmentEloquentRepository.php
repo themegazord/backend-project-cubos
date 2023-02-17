@@ -44,4 +44,33 @@ class InstallmentEloquentRepository implements InstallmentRepositoryInterface {
     {
        Installment::find($id)->update($payload);
     }
+
+    public function checkIfInstallmentItPartiallyPaid(int $id): bool
+    {
+        return (bool)Installment::query()
+            ->where('id', $id)
+            ->where('status', 'Partially Paid')
+            ->first();
+    }
+
+    public function checkIfInstallmentItOverdue(int $id): bool
+    {
+        return (bool)Installment::query()
+            ->where('id', $id)
+            ->where('overdue_payment', 1)
+            ->first();
+    }
+
+    public function checkIfInstallmentExists(int $id): bool
+    {
+        return (bool)Installment::query()
+            ->where('id', $id)
+            ->first();
+    }
+    public function destroy(int $id): void
+    {
+        Installment::query()
+            ->findOrFail($id)
+            ->delete();
+    }
 }

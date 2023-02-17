@@ -7,7 +7,42 @@ use Symfony\Component\HttpFoundation\Response;
 
 class InstallmentException extends Exception
 {
+    /**
+     * @throws InstallmentException
+     */
     public static function billingAlreadyExists(): self {
         throw new self('A cobrança já existe.', Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @throws InstallmentException
+     */
+    public static function installmentItPartiallyPaid(): self
+    {
+        throw new self('O titulo não pode ser apagado, pois está parcialmente pago, defina-o como aberto ou quite-o para poder apagar.', Response::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * @throws InstallmentException
+     */
+    public static function installmentItOverdue(): self
+    {
+        throw new self('O titulo não pode ser apagado, pois está em atraso', Response::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * @throws InstallmentException
+     */
+    public static function debtorIsDebtor(): self
+    {
+        throw new self('O titulo não pode ser apagado, cliente vinculado a esse titulo contêm um ou mais titulos em atraso', Response::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * @throws InstallmentException
+     */
+    public static function installmentNotExists(): self
+    {
+        throw new self('O titulo não existe', Response::HTTP_NOT_FOUND);
     }
 }
