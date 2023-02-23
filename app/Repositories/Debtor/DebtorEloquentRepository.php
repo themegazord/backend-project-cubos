@@ -100,6 +100,7 @@ class DebtorEloquentRepository implements DebtorRepositoryInterface
     public function getAllDefaulters(int $id): array|\Illuminate\Database\Eloquent\Collection
     {
         return Debtor::query()
+            ->distinct()
             ->select('debtors.*')
             ->join('users', function($join) {
                 $join->on('debtors.user_id', '=', 'users.id');
@@ -115,6 +116,7 @@ class DebtorEloquentRepository implements DebtorRepositoryInterface
     public function getAllPayers(int $id): array|\Illuminate\Database\Eloquent\Collection
     {
         return Debtor::query()
+            ->distinct()
             ->select('debtors.*')
             ->join('users', function($join) {
                 $join->on('debtors.user_id', '=', 'users.id');
