@@ -13,7 +13,7 @@ class InstallmentService {
     {}
 
     public function create(array $installment): void {
-        $this->verifyExistsBilling($installment['id_billing']);
+        $installment['id_billing'] = $this->generateUuid();
         $this->installmentRepository->create($installment);
     }
 
@@ -26,22 +26,18 @@ class InstallmentService {
      */
     public function determineStatusInstallment (array $installmentRequest, int $id): array {
         $installment = $this->findById($id);
-        if(doubleval($installmentRequest['paid_amount']) > 0  && doubleval($installmentRequest['paid_amount']) < $installment->amount) {
-            $installmentRequest['status'] = 'Partially paid';
+        if($installmentRequest['status'] == 'Pending') {
+            $installmentRequest['status'] = 'Pending';
             $this->update($installmentRequest, $installment['id']);
             return $installmentRequest;
         }
-        if (doubleval($installmentRequest['paid_amount']) === $installment->amount) {
-            $installmentRequest['status'] = 'Paid';
-            $this->update($installmentRequest, $installment['id']);
-            return $installmentRequest;
-        }
-        if (doubleval($installmentRequest['paid_amount']) == 0){
+        if ($installmentRequest['status'] == 'Open') {
             $installmentRequest['status'] = 'Open';
             $this->update($installmentRequest, $installment['id']);
             return $installmentRequest;
         }
     }
+
     public function allInstallments(string $filtros = null): array {
         if(is_null($filtros)) {
             return $this->determineIfInstallmentsAreOverduePayment($this->getTheInstallmentsWhenThereIsNoFilter());
@@ -55,7 +51,7 @@ class InstallmentService {
     public function verifyPossibilityToDeleteAInstallment(int $id): void
     {
         $this->checkIfInstallmentExists($id);
-        $this->checkIfInstallmentItPartiallyPaid($id);
+        $this->checkIfInstallmentItPending($id);
         $this->checkIfInstallmentItOverdue($id);
         $this->destroy($id);
     }
@@ -64,24 +60,13 @@ class InstallmentService {
     {
         $this->installmentRepository->destroy($id);
     }
+
     /**
      * @throws InstallmentException
      */
     private function update(array $payload, int $id): void {
-        $this->verifyIsPossibleAlterIdBilling($payload, $id);
         $this->installmentRepository->update($payload, $id);
     }
-
-    /**
-     * @throws InstallmentException
-     */
-    private function verifyIsPossibleAlterIdBilling(array $payload, int $id): void
-    {
-        if(($this->findById($id)->id_billing != $payload['id_billing']) && $this->verifyExistsBilling($payload['id_billing'])) {
-            throw InstallmentException::billingAlreadyExists();
-        }
-    }
-
 
 
     private function getTheInstallmentsWhenThereIsNoFilter(): array {
@@ -118,19 +103,9 @@ class InstallmentService {
     /**
      * @throws InstallmentException
      */
-    private function verifyExistsBilling(int $id_billing):InstallmentException|bool {
-        if($this->installmentRepository->findByIdBilling($id_billing)) {
-            throw InstallmentException::billingAlreadyExists();
-        }
-        return false;
-    }
-
-    /**
-     * @throws InstallmentException
-     */
-    private function checkIfInstallmentItPartiallyPaid(int $id): void
+    private function checkIfInstallmentItPending(int $id): void
     {
-        if($this->installmentRepository->checkIfInstallmentItPartiallyPaid($id)) throw InstallmentException::installmentItPartiallyPaid();
+        if($this->installmentRepository->checkIfInstallmentItPending($id)) throw InstallmentException::installmentItPending();
     }
 
     /**
@@ -138,14 +113,7 @@ class InstallmentService {
      */
     private function checkIfInstallmentItOverdue(int $id): void
     {
-        if($this->installmentRepository->checkIfInstallmentItOverdue($id)) throw InstallmentException::installmentItOverdue();    }
-
-    /**
-     * @throws InstallmentException
-     */
-    private function checkIfDebtorIsDebtor(int $id): void
-    {
-        if($this->installmentRepository->checkIfDebtorIsDebtor($id)) throw InstallmentException::debtorIsDebtor();
+        if($this->installmentRepository->checkIfInstallmentItOverdue($id)) throw InstallmentException::installmentItOverdue();
     }
 
     /**
@@ -154,5 +122,9 @@ class InstallmentService {
     private function checkIfInstallmentExists(int $id): void
     {
         if(!$this->installmentRepository->checkIfInstallmentExists($id)) throw InstallmentException::installmentNotExists();
+    }
+
+    private function generateUuid(): null|string {
+        return uuid_create();
     }
  }

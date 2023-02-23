@@ -47,11 +47,11 @@ class InstallmentEloquentRepository implements InstallmentRepositoryInterface {
        Installment::find($id)->update($payload);
     }
 
-    public function checkIfInstallmentItPartiallyPaid(int $id): bool
+    public function checkIfInstallmentItPending(int $id): bool
     {
         return (bool)Installment::query()
             ->where('id', $id)
-            ->where('status', 'Partially Paid')
+            ->where('status', 'Pending')
             ->first();
     }
 

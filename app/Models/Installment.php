@@ -13,14 +13,14 @@ class Installment extends Model
 
     protected $fillable = [
         'users_id',
-        'id_billing',
         'status',
+        'id_billing',
+        'description',
         'debtor_id',
         'emission_date',
         'due_date',
         'overdue_payment',
         'amount',
-        'paid_amount'
     ];
 
     public function user(): BelongsTo {

@@ -13,7 +13,7 @@ interface InstallmentRepositoryInterface {
     public function allInstallmentsWithFilters(array $filtros): array;
     public function findByIdBilling(int $id_billing): bool;
     public function update(array $payload, int $id): void;
-    public function checkIfInstallmentItPartiallyPaid(int $id): bool;
+    public function checkIfInstallmentItPending(int $id): bool;
     public function checkIfInstallmentItOverdue(int $id): bool;
 
     public function checkIfInstallmentExists(int $id): bool;

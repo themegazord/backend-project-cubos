@@ -18,32 +18,34 @@ Essa rota é autenticada
 
 ### Parametros de resposta
 
-| Parâmetro       | Tipo    | Descrição                                                                   |
-|-----------------|---------|-----------------------------------------------------------------------------|
-| id              | inteiro | Id do titulo                                                                |
-| users_id        | inteiro | Id do criador do titulo                                                     |
-| id_billing      | inteiro | Id da cobrança                                                              |
-| status          | string  | Define o status do titulos que varia entre `Open`, `Partially Paid`, `Paid` |
-| debtor          | string  | Nome do devedor                                                             |
-| emission_date   | string  | Data de emissão do titulo                                                   |
-| due_date        | string  | Data do vencimento do titulo                                                |
-| overdue_payment | bool    | Define se o titulo está vencido ou não                                      |
-| amount          | float   | Valor do titulo                                                             |
-| paid_amount     | float   | Valor pago do titulo                                                        |
+| Parâmetro       | Tipo    | Descrição                                                    |
+|-----------------|---------|--------------------------------------------------------------|
+| id              | inteiro | Id do titulo                                                 |
+| users_id        | inteiro | Id do criador do titulo                                      |
+| id_billing      | string  | Uuid da cobrança                                             |
+| status          | string  | Define o status do titulos que varia entre `Open`, `Pending` |
+| description     | string  | Descrição do titulo                                          |
+| debtor_id       | int     | Id do cliente                                                |
+| emission_date   | string  | Data de emissão do titulo                                    |
+| due_date        | string  | Data do vencimento do titulo                                 |
+| overdue_payment | bool    | Define se o titulo está vencido ou não                       |
+| amount          | float   | Valor do titulo                                              |
 
 ### Exemplo de resposta
 ```json
 {
-    "id": 5,
-    "users_id": 7,
-    "id_billing": 12704,
-    "status": "P",
-    "debtor": "Samantha Kshlerin",
-    "emission_date": "2023-01-14",
-    "due_date": "2023-02-15",
-    "overdue_payment": 1,
-    "amount": 81.16,
-    "paid_amount": 99.11
+    "id": 10,
+    "users_id": 8,
+    "id_billing": "bd29dd7e-4a5a-4d6e-a6ff-43b30e0558d2",
+    "status": "Open",
+    "description": "Descrição 1 teste 2 3 4 5 6",
+    "debtor_id": 8,
+    "emission_date": "2023-02-23",
+    "due_date": "2023-02-25",
+    "overdue_payment": 0,
+    "amount": 299.9,
+    "created_at": "2023-02-23T20:03:45.000000Z",
+    "updated_at": "2023-02-23T20:03:45.000000Z"
 }
 ```
 

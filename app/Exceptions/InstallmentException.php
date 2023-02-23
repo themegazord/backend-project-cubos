@@ -17,9 +17,9 @@ class InstallmentException extends Exception
     /**
      * @throws InstallmentException
      */
-    public static function installmentItPartiallyPaid(): self
+    public static function installmentItPending(): self
     {
-        throw new self('O titulo não pode ser apagado, pois está parcialmente pago, defina-o como aberto ou quite-o para poder apagar.', Response::HTTP_UNAUTHORIZED);
+        throw new self('O titulo não pode ser apagado, pois está pendente de pagamento, defina-o como aberto.', Response::HTTP_UNAUTHORIZED);
     }
 
     /**

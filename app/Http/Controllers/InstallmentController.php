@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InstallmentException;
 use App\Http\Requests\InstallmentStoreUpdateRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Services\Installment\InstallmentService;
 use Illuminate\Http\JsonResponse;
@@ -28,11 +27,11 @@ class InstallmentController extends Controller
                     'users_id',
                     'id_billing',
                     'debtor_id',
+                    'description',
                     'emission_date',
                     'due_date',
-                    'overdue_payment',
                     'amount',
-                    'paid_amount'
+                    'status'
                 )
             );
             return response()->json(['msg' => 'Installment has been created'], Response::HTTP_CREATED);

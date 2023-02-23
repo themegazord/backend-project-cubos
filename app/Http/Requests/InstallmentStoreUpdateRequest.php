@@ -25,13 +25,12 @@ class InstallmentStoreUpdateRequest extends FormRequest
         });
 
         return [
-            'users_id' => 'exists:users,id|numeric',
-            'id_billing' => 'numeric',
-            'debtor_id'=> 'integer|exists:debtors,id',
-            'emission_date' => 'date|date_format:"Y-m-d"',
-            'due_date' => 'date|date_format:"Y-m-d"|due_date:emission_date',
-            'amount' => 'numeric|min:1',
-            'paid_amount' => 'numeric|min:0|lte:amount'
+            'users_id' => 'exists:users,id|numeric|required',
+            'debtor_id'=> 'integer|exists:debtors,id|required',
+            'emission_date' => 'date|date_format:"Y-m-d"|required',
+            'due_date' => 'date|date_format:"Y-m-d"|due_date:emission_date|required',
+            'amount' => 'numeric|min:1|required',
+            'description' => 'string|required|max:255'
         ];
     }
 
@@ -40,11 +39,12 @@ class InstallmentStoreUpdateRequest extends FormRequest
         return [
             'numeric' => 'Esse campo é apenas númerico',
             'date' => 'Esse campo é apenas para data',
+            'required' => 'Esse campo é obrigatório',
 
             'users_id.exists' => 'Insira apenas um usuário válido',
 
-            'debtor_id.integer' => 'O campo de devedor aceita apenas inteiros',
-            'debtor_id.exists' => 'Insira um devedor que exista.',
+            'debtor_id.integer' => 'O campo de client aceita apenas inteiros',
+            'debtor_id.exists' => 'Insira um cliente que exista.',
 
             'emission_date.date_format' => 'Formato inválido, formato correto -> YYYY-mm-dd',
 
@@ -53,8 +53,8 @@ class InstallmentStoreUpdateRequest extends FormRequest
 
             'amount.min' => 'O valor do titulo deve ser maior que 0',
 
-            'paid_amount.min' => 'O valor do pagamento deve ser maior que 0',
-            'paid_amount.lte' => 'O valor do pagamento deve ser menor ou igual que o valor do titulo'
+            'description.string' => 'Foi inserido caracteres inválidos',
+            'description.max' => 'O campo de descrição aceita no máximo 255 caracteres',
         ];
     }
 }

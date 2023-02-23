@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('installments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('users_id');
-            $table->bigInteger('id_billing');
+            $table->uuid('id_billing');
             $table->date('emission_date');
             $table->date('due_date');
             $table->float('amount', 8, 2);
