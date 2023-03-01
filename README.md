@@ -1,6 +1,6 @@
 # Backend Finance Cubo's Acadaemy
 ![version](https://img.shields.io/badge/DocVersion-0.0.3-informational)
-![version](https://img.shields.io/badge/AppVersion-2.2.0-informational)
+![version](https://img.shields.io/badge/AppVersion-2.2.1-informational)
 
 ## Requisitos
 
