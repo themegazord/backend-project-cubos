@@ -3,7 +3,7 @@
 namespace App\Repositories\Debtor;
 
 use App\Models\Debtor;
-use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class DebtorEloquentRepository implements DebtorRepositoryInterface
 {
@@ -15,7 +15,19 @@ class DebtorEloquentRepository implements DebtorRepositoryInterface
     public function findUserDebtors(int $id): \Illuminate\Database\Eloquent\Collection
     {
         return Debtor::query()
-            ->where('user_id', $id)
+            ->distinct()
+            ->select(DB::raw(
+                '(
+                    case
+                        when installments.overdue_payment = 0 then "Payer"
+                        when installments.overdue_payment = 1 then "Defaulter"
+                    end
+                ) as status'
+                ), 'debtors.*')
+            ->join('installments', function($join) {
+                $join->on('installments.debtor_id', '=', 'debtors.id');
+            })
+            ->where('debtors.user_id', $id)
             ->get();
     }
 
@@ -102,9 +114,6 @@ class DebtorEloquentRepository implements DebtorRepositoryInterface
         return Debtor::query()
             ->distinct()
             ->select('debtors.*')
-            ->join('users', function($join) {
-                $join->on('debtors.user_id', '=', 'users.id');
-            })
             ->join('installments', function($join) {
                 $join->on('installments.debtor_id', '=', 'debtors.id');
             })
@@ -118,9 +127,6 @@ class DebtorEloquentRepository implements DebtorRepositoryInterface
         return Debtor::query()
             ->distinct()
             ->select('debtors.*')
-            ->join('users', function($join) {
-                $join->on('debtors.user_id', '=', 'users.id');
-            })
             ->join('installments', function($join) {
                 $join->on('installments.debtor_id', '=', 'debtors.id');
             })
