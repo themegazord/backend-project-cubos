@@ -21,9 +21,9 @@ class UserService
      */
     public function update(array $payload, User $user): void
     {
-        ValidateCPF::validateCPF($payload['cpf']);
+        isset($payload['cpf']) && ValidateCPF::validateCPF($payload['cpf']);
         $this->verifyEmailExists($payload['email'], $user);
-        $this->verifyCPFExists($payload['cpf'], $user);
+        isset($payload['cpf']) && $this->verifyCPFExists($payload['cpf'], $user);
         $this->userRepository->update($payload, $user);
     }
 
