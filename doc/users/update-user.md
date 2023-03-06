@@ -25,6 +25,7 @@ Essa rota é autenticada
 | password  | string           | Senha do usuário    | Sim          |
 | cpf       | string `or` null | CPF do usuário      | Não          |
 | phone     | string `or` null | Telefone do usuário | Não          |
+| _method   | string           | Metodo da requisição| Sim          |
 
 ### Exemplo de requisição
 
@@ -34,7 +35,8 @@ Essa rota é autenticada
     "email": "contato.wanjalagus@outlook.com.br",
     "password": "password",
     "cpf": "01234567891",
-    "phone": "67999999999"
+    "phone": "67999999999",
+    "_method":"PATCH"
 }
 ```
 ### Parametro da resposta
