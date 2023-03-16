@@ -21,10 +21,11 @@ class DebtorEloquentRepository implements DebtorRepositoryInterface
                     case
                         when installments.overdue_payment = 0 then "Payer"
                         when installments.overdue_payment = 1 then "Defaulter"
+                        else "New"
                     end
                 ) as status'
                 ), 'debtors.*')
-            ->join('installments', function($join) {
+            ->leftJoin('installments', function($join) {
                 $join->on('installments.debtor_id', '=', 'debtors.id');
             })
             ->where('debtors.user_id', $id)
