@@ -18,16 +18,19 @@ Essa rota é autenticada
 
 ### Parametros de requisição
 
-| Parametro | Tipo    | Descrição                      | Obrigatório? |
-|-----------|---------|--------------------------------|--------------|
-| user_id   | integer | ID do usuário criador          | Sim          |
-| name      | string  | Nome do cliente                | Sim          |
-| email     | string  | Email do cliente               | Sim          |
-| cpf       | string  | CPF do cliente                 | Sim          |
-| phone     | string  | Telefone do cliente            | Sim          |
-| _method   | string  | O metodo que vai ser utilizado | Sim          |
-| city      | string  | Cidade do cliente              | Não          |
-| state     | string  | Estado do cliente              | Não          |
+| Parametro    | Tipo    | Descrição              | Obrigatório? |
+|--------------|---------|------------------------|--------------|
+| user_id      | integer | ID do usuário criador  | Sim          |
+| name         | string  | Nome do cliente        | Sim          |
+| email        | string  | Email do cliente       | Sim          |
+| cpf          | string  | CPF do cliente         | Sim          |
+| phone        | string  | Telefone do cliente    | Sim          |
+| address      | string  | Endereço do cliente    | Não          |
+| complement   | string  | Complemento do cliente | Não          |
+| cep          | string  | CEP do cliente         | Não          |
+| neighborhood | string  | Bairro do cliente      | Não          |
+| city         | string  | Cidade do cliente      | Não          |
+| state        | string  | Estado do cliente      | Não          |          
 
 ### Exemplo de requisição
 
@@ -38,9 +41,12 @@ Essa rota é autenticada
     "email": "fulano@email.com",
     "cpf": "12345678900",
     "phone": "+5567999999999",
+    "address": "Rua quincas borba",
+    "complement": "Do lado da mariazinha conveniencia",
+    "cep": "79000000",
+    "neighborhood": "Bairro Judas perdeu a bota",
     "city": "Cidade",
-    "state": "Estado",
-    "_method": "PATCH"
+    "state": "Estado"
 }
 ```
 
