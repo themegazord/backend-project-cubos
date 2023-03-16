@@ -22,21 +22,21 @@ Não tem parametro
 
 ### Parametro de resposta
 
-| Parâmetro    | Tipo    | Descrição                               |
-|--------------|---------|-----------------------------------------|
-| status       | string  | Status do cliente `Payer` ou `Defaulter`|
-| id           | integer | ID do cliente                           |
-| user_id      | integer | ID do usuário que cadastrou o cliente   |
-| name         | string  | Nome do cliente                         |
-| email        | string  | Email do cliente                        |
-| cpf          | string  | CPF do cliente                          |
-| phone        | string  | Telefone do cliente                     |
-| address      | string  | Rua do cliente                          |
-| complement   | string  | Complemento do endereço do cliente      |
-| cep          | string  | CEP do cliente                          |
-| neighborhood | string  | Bairro do cliente                       |
-| city         | string  | Cidade do cliente                       |
-| state        | string  | Estado do cliente                       |
+| Parâmetro    | Tipo    | Descrição                                                          |
+|--------------|---------|--------------------------------------------------------------------|
+| status       | string  | Status do cliente `Payer`, `Defaulter` ou para usuários novos `New`|
+| id           | integer | ID do cliente                                                      |
+| user_id      | integer | ID do usuário que cadastrou o cliente                              |
+| name         | string  | Nome do cliente                                                    |
+| email        | string  | Email do cliente                                                   |
+| cpf          | string  | CPF do cliente                                                     |
+| phone        | string  | Telefone do cliente                                                |
+| address      | string  | Rua do cliente                                                     |
+| complement   | string  | Complemento do endereço do cliente                                 |
+| cep          | string  | CEP do cliente                                                     |
+| neighborhood | string  | Bairro do cliente                                                  |
+| city         | string  | Cidade do cliente                                                  |
+| state        | string  | Estado do cliente                                                  |
 
 ## Exemplo de resposta
 
