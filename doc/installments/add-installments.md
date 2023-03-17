@@ -19,7 +19,7 @@ Essa rota é autenticada
 | emission_date | string  | Data de emissão do titulo                         | Sim          |
 | due_date      | string  | Data do vencimento do titulo                      | Sim          |
 | amount        | float   | Valor do titulo                                   | Sim          |
-| status        | string  | Status do Titulo que pode ser `Open` ou `Pending` | Sim          |
+| status        | string  | Status do Titulo que pode ser `Paid` ou `Pending` | Sim          |
 | description   | string  | Descrição do titulo                               | Sim          |
 
 ### Exemplo de requisição
@@ -31,7 +31,7 @@ Essa rota é autenticada
     "emission_date": "2022-12-29",
     "due_date": "2023-02-03",
     "amount": 94.96,
-    "status": "Open",
+    "status": "Paid",
     "description": "teste"
 }
 ```
