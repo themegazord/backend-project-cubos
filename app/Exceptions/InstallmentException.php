@@ -45,4 +45,8 @@ class InstallmentException extends Exception
     {
         throw new self('O titulo não existe', Response::HTTP_NOT_FOUND);
     }
+
+    public static function statusIsNotValid(): self {
+        throw new self('O status passado não é valido, por favor, insira apenas Paid ou Pending', Response::HTTP_UNAUTHORIZED);
+    }
 }

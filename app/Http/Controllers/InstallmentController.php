@@ -25,7 +25,6 @@ class InstallmentController extends Controller
             create(
                 $request->only(
                     'users_id',
-                    'id_billing',
                     'debtor_id',
                     'description',
                     'emission_date',
@@ -48,7 +47,8 @@ class InstallmentController extends Controller
     public function update(InstallmentStoreUpdateRequest $request, int $id): JsonResponse
     {
         try {
-            return response()->json($this->installmentService->determineStatusInstallment($request->all(), $id));
+            $this->installmentService->update($request->all(), $id);
+            return response()->json(['msg' => 'Installment has been updated']);
         } catch (InstallmentException $error) {
             return response()->json(['error' => $error->getMessage()], $error->getCode());
         }
@@ -60,7 +60,7 @@ class InstallmentController extends Controller
     public function destroy(int $id): JsonResponse
     {
         try {
-            $this->installmentService->verifyPossibilityToDeleteAInstallment($id);
+            $this->installmentService->destroy($id);
             return response()->json([], Response::HTTP_NO_CONTENT);
         } catch (InstallmentException $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode());

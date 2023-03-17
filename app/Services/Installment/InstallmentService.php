@@ -5,8 +5,6 @@ namespace App\Services\Installment;
 use App\Exceptions\InstallmentException;
 use App\Models\Installment;
 use App\Repositories\Installment\InstallmentRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class InstallmentService {
     public function __construct(private InstallmentRepositoryInterface $installmentRepository)
@@ -24,19 +22,11 @@ class InstallmentService {
     /**
      * @throws InstallmentException
      */
-    public function determineStatusInstallment (array $installmentRequest, int $id): array {
-        $installment = $this->findById($id);
-        if($installmentRequest['status'] == 'Pending') {
-            $installmentRequest['status'] = 'Pending';
-            $this->update($installmentRequest, $installment['id']);
-            return $installmentRequest;
-        }
-        if ($installmentRequest['status'] == 'Open') {
-            $installmentRequest['status'] = 'Open';
-            $this->update($installmentRequest, $installment['id']);
-            return $installmentRequest;
-        }
+    public function update(array $payload, int $id): void {
+        $this->determineStatusInstallment($payload);
+        $this->installmentRepository->update($payload, $id);
     }
+
 
     public function allInstallments(string $filtros = null): array {
         if(is_null($filtros)) {
@@ -48,26 +38,28 @@ class InstallmentService {
     /**
      * @throws InstallmentException
      */
-    public function verifyPossibilityToDeleteAInstallment(int $id): void
+    private function verifyPossibilityToDeleteAInstallment(int $id): void
     {
         $this->checkIfInstallmentExists($id);
         $this->checkIfInstallmentItPending($id);
         $this->checkIfInstallmentItOverdue($id);
-        $this->destroy($id);
     }
 
-    private function destroy(int $id): void
+    public function destroy(int $id): void
     {
+        $this->verifyPossibilityToDeleteAInstallment($id);
         $this->installmentRepository->destroy($id);
     }
+
 
     /**
      * @throws InstallmentException
      */
-    private function update(array $payload, int $id): void {
-        $this->installmentRepository->update($payload, $id);
+    private function determineStatusInstallment (array $installmentRequest): void {
+        if(!$installmentRequest['status'] == 'Paid' || !$installmentRequest['status'] == 'Pending') {
+            throw InstallmentException::statusIsNotValid();
+        }
     }
-
 
     private function getTheInstallmentsWhenThereIsNoFilter(): array {
         return $this->installmentRepository->allInstallments();
@@ -90,12 +82,13 @@ class InstallmentService {
         return array_map(function ($installment) {
             if ($installment['due_date'] < date('Y-m-d')) {
                 $installment['overdue_payment'] = 1;
-                return $this->determineStatusInstallment($installment, $installment['id']);
+                $this->update($installment, $installment['id']);
+                return $installment;
             }
             if ($installment['due_date'] >= date('Y-m-d')) {
                 $installment['overdue_payment'] = 0;
                 $this->update($installment, $installment['id']);
-                return $this->determineStatusInstallment($installment, $installment['id']);
+                return $installment;
             }
         }, $installmentRequest);
     }
